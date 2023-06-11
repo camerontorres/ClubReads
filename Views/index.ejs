@@ -1,0 +1,32 @@
+<%- include ('partials/header.ejs') %>
+<body>
+ <h2>hello</h2>
+
+ <div>
+    <a href="/signUp" class="btn btn-primary"> sign up</a>
+</div>
+
+<div>
+    <a href="/login" class="btn btn-primary"> login</a>
+</div>
+
+<% if (user) { %>
+    <div>
+    <h1>You're logged in</h1>
+    </div>
+
+    <div>
+        <a href="/logout" class="btn btn-danger"> logout</a>
+    </div>
+  <% } else{%>
+    <div>
+        time to login!
+    </div>
+    <% } %>
+
+  
+
+    
+    
+</body>
+</html>

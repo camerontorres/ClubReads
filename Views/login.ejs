@@ -1,0 +1,53 @@
+<%- include('partials/header') -%>
+
+<main class="container-fluid bg-white headerGap" style="padding: 0;">
+  <div class="row justify-content-center m-0 p-0" style="width: 100vw; height: 80vh;">
+    <section class="col-6 mt-5 p-0">
+      <% if (locals.messages.errors) { %> <% messages.errors.forEach( el => { %>
+      <div class="alert alert-danger"><%= el.msg %></div>
+      <% }) %> <% } %> <% if (locals.messages.info) { %> <%
+      messages.info.forEach( el => { %>
+      <div class="alert alert-info"><%= el.msg %></div>
+      <% }) %> <% } %>
+      <form action="/login" method="POST" class="text-center">
+        <div class="mb-3 text-center">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          
+          <input
+            type="email"
+            class="form-control mx-auto"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+            name="email"
+            style="width: 70%;"
+          />
+        </div>
+        <div class="mb-3 text-center">
+          <label for="exampleInputPassword1" class="form-label ">Password</label>
+          <input
+            type="password"
+            class="form-control mx-auto"
+            id="exampleInputPassword1"
+            name="password"
+            style="width: 70%;"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100px;">Submit</button>
+      </form>
+    <div class="text-center mt-5">
+      <p>New? click here</p>
+      <a class="btn btn-primary" href="/signup">Sign up</a> 
+      </div>
+    </section>
+    <section class="col-6 mt-0 p-0">
+      <div class="col-md-6 p-0">
+            <img src="imgs/login.jpg" style="height: 600px; width: 50vw; z-index: 0;">
+            <h1 class="text-center " style="z-index: 1;"> Welcome back</h1>
+
+        </div>
+      
+      </section>
+    
+  </div>
+</main>
+
