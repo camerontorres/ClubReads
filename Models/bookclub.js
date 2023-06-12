@@ -8,6 +8,7 @@ const clubSchema = new mongoose.Schema({
   clubPic: { type: String, default: 'clubDefault.jpg' },
   desc: { type: String},
   nextBook: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
+  created_at    : { type: Date, required: true, default: Date.now },
   
   
 

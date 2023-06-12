@@ -58,6 +58,50 @@ exports.postLogin = async (req, res, next) => {
     }
   };
 
+
+  exports.updateUserProfile = async (req, res, next) => {
+    try {
+      const userId = req.user._id; // Assuming you have authenticated the user and have access to the user object
+  
+      const { profilePic, bio, name } = req.body;
+  
+      // Prepare the fields to be updated
+      const updateFields = {};
+      if (profilePic) {
+        updateFields.profilePic = profilePic;
+      }
+      if (bio) {
+        updateFields.bio = bio;
+      }
+      if (name) {
+        updateFields.name = name;
+      }
+  
+      // Update the user's profile in the database
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $set: updateFields },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        // Handle the case where the user is not found
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      // Return the updated user as the response
+      res.redirect("/profile");
+      
+      
+    } catch (err) {
+      // Handle any errors that occur during the update process
+      return next(err);
+    }
+  };
+
+
+
+
 exports.logout = (req, res) => {
   req.logout(() => {
     console.log('User has logged out.')

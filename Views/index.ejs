@@ -2,13 +2,8 @@
 <body>
  <h2>hello</h2>
 
- <div>
-    <a href="/signUp" class="btn btn-primary"> sign up</a>
-</div>
 
-<div>
-    <a href="/login" class="btn btn-primary"> login</a>
-</div>
+
 
 <% if (user) { %>
     <div>
@@ -18,7 +13,27 @@
     <div>
         <a href="/logout" class="btn btn-danger"> logout</a>
     </div>
+    <div>
+        <div>
+            <a href="#" class="btn btn-primary"> view my club</a>
+        </div>
+        <div>
+            <a href="#" class="btn btn-primary"> view my book</a>
+        </div>
+        <div>
+            <a href="/bookclubs" class="btn btn-primary"> view clubs</a>
+        </div>
+
+    </div>
   <% } else{%>
+
+    <div>
+        <a href="/login" class="btn btn-primary"> login</a>
+    </div>
+    <div>
+        <a href="/signUp" class="btn btn-primary"> sign up</a>
+    </div>
+    
     <div>
         time to login!
     </div>
@@ -28,5 +43,4 @@
 
     
     
-</body>
-</html>
+<%- include ('partials/footer.ejs') %>

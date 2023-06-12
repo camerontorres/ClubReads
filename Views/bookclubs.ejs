@@ -1,0 +1,54 @@
+<%- include('partials/header.ejs') %>
+
+
+howdy!
+
+<p>book club list here:</p>
+
+
+
+<div>
+    <button type="button" class="createClub btn btn-danger " data-bs-toggle="modal" data-bs-target="#clubModal">
+        Create new club
+    </button>
+</div>
+    <!--MODAL-->
+<div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="clubModalLabel">Create a new book club</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+
+    <div class="modal-body">
+        <form action="/user/profile?_method=PUT" method="POST" enctype="multipart/form-data">
+        <label for="imgUpload" class="form-label">Profile Picture</label>
+        <input type="file" class="form-control" id="imageUpload" name="profilePic">
+
+        
+            <label for="nameChange" class="form-label">name</label>
+            <input type="text" class="form-control" id="nameChange" name="name">
+
+            <label for="nameChange" class="form-label">bio</label>
+            <input type="text" class="form-control" id="nameChange" name="name">
+
+            
+    </div>
+
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+        <button type="submit" class="btn btn-primary" value="Upload">Save changes</button> 
+    </div>
+    </form>
+    </div>
+</div>
+</div> 
+
+
+
+
+<%- include ('partials/footer.ejs') %>
+

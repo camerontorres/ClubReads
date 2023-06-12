@@ -4,6 +4,55 @@
       <div class="col-6 p-0">
           <div class="mt-5 mb-5">
             <div class="mb-3 d-flex flex-column">
+                <p>heyoooo</p>
+
+                <p>prof pic here: <%= user.profilefPic  %></p>
+                <p> your username is <%= user.userName %></p>
+                <p> your actual name is <%= user.name %></p>
+                <p>my email is <%= user.email  %></p>
+                <p>current book(s)</p>
+                <p>these are my clubs: <%= user.bookClubs  %></p>
+                <p>(friends)?</p>
+                <p>user since: <%= user.joinDate %></p>
+
+                <% if (user){ %>
+
+                            <div>
+                                <button type="button" class="profileUpdateBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#profileModal">
+                                    edit info
+                                </button>
+                            </div>
+                                <!--MODAL-->
+                            <div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="profileModalLabel">Edit info</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+
+                                <div class="modal-body">
+                                    <form action="/user/profile" method="POST" enctype="multipart/form-data">
+                                    <label for="imgUpload" class="form-label">Profile Picture</label>
+                                    <input type="file" class="form-control" id="imageUpload" name="profilePic">
+
+                                    
+                                        <label for="nameChange" class="form-label">name</label>
+                                        <input type="text" class="form-control" id="nameChange" name="name">
+                                </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                                    <button type="submit" class="btn btn-primary" value="Upload">Save changes</button> 
+                                </div>
+                                </form>
+                                </div>
+                            </div>
+                            </div> 
+
+                    <% } %>
              
             
 
@@ -23,6 +72,10 @@
       <div class="col-6 p-0">
         <div class="mt-5 mb-5">
           <div class="align-self-center text-center">
+            <p>youre viewing your profile haha</p>
+            <div>
+                <a href="/bookclubs" class="btn btn-danger"> join a club, nerd</a>
+            </div>
             
            
 
@@ -34,3 +87,5 @@
     </div>
   </div>
 </div>
+
+<%- include ('partials/footer.ejs') %>

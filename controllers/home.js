@@ -14,6 +14,15 @@ module.exports = {
       res.render("signUp.ejs");
     },
 
+    getProfile: (req, res) => {
+        
+        res.render("profile.ejs",{ user: req.user });
+      },
+      getBookclubs: (req, res) => {
+        
+        res.render("bookclubs.ejs",{ user: req.user });
+      },
+
  
 
 }
