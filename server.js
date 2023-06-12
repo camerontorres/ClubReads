@@ -5,6 +5,8 @@ const app = express();
 const mongoose = require("mongoose");
 
 
+
+
 const session = require("express-session");
 const LocalStrategy = require('passport-local').Strategy;
 const MongoStore = require("connect-mongo")(session);
@@ -40,14 +42,18 @@ app.set("view engine", "ejs");
 //app.use(express.static("public"));
 app.use('/public', express.static('public'))
 
+//Use forms for put / delete
+app.use(methodOverride("_method"));
+
+
+
 //Body Parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
 
-//Use forms for put / delete
-app.use(methodOverride("_method"));
+
 
 // Setup Sessions - stored in MongoDB
 app.use(

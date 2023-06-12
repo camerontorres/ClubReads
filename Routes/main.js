@@ -14,7 +14,8 @@ router.get("/bookclubs", homeController.getBookclubs)
 router.get("/login", authController.getLogin);
 router.post("/login", authController.postLogin);
 router.get("/logout", authController.logout);
-router.post("/user/profile", authController.updateUserProfile);
+
+router.post("/user/profile/:_id", authController.updateUserProfile);
 
 
 router.post("/signUp", authController.postSignUp); // Update the function name to postSignUp

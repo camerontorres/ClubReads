@@ -33,21 +33,34 @@
 
 
                                 <div class="modal-body">
-                                    <form action="/user/profile" method="POST" enctype="multipart/form-data">
-                                    <label for="imgUpload" class="form-label">Profile Picture</label>
-                                    <input type="file" class="form-control" id="imageUpload" name="profilePic">
+                                    <form action="/user/profile/<%= user._id %>" method="POST" >
+                                        <input type="hidden" name="_method" value="PUT">
+                                   <label for="imgUpload" class="form-label">Profile Picture</label>
+                                    <input type="file" class="form-control" id="imageUpload" name="profilePic">      <!---   enctype="multipart/form-data"-->
 
                                     
-                                        <label for="nameChange" class="form-label">name</label>
+                                        <label for="nameChange" class="form-label">Name</label>
                                         <input type="text" class="form-control" id="nameChange" name="name">
+
+                                        <label for="bioChange" class="form-label">Bio</label>
+                                        <input type="text" class="form-control" id="bioChange" name="bio">
                                 </div>
 
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
-                                    <button type="submit" class="btn btn-primary" value="Upload">Save changes</button> 
+                                    <button type="submit" class="btn btn-primary" value="Save changes">Save changes</button> 
                                 </div>
                                 </form>
+
+                             
+
+
+
+
+
+
+
                                 </div>
                             </div>
                             </div> 

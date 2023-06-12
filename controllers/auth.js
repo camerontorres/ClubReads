@@ -61,9 +61,14 @@ exports.postLogin = async (req, res, next) => {
 
   exports.updateUserProfile = async (req, res, next) => {
     try {
-      const userId = req.user._id; // Assuming you have authenticated the user and have access to the user object
+      const userId = req.params._id; // Assuming you have authenticated the user and have access to the user object
   
-      const { profilePic, bio, name } = req.body;
+      const {profilePic, bio , name } = req.body;
+     
+
+     
+      
+  
   
       // Prepare the fields to be updated
       const updateFields = {};
@@ -78,11 +83,7 @@ exports.postLogin = async (req, res, next) => {
       }
   
       // Update the user's profile in the database
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { $set: updateFields },
-        { new: true }
-      );
+      const updatedUser = await User.findByIdAndUpdate(userId, { $set: updateFields } ,{ new: true })
   
       if (!updatedUser) {
         // Handle the case where the user is not found
@@ -90,6 +91,7 @@ exports.postLogin = async (req, res, next) => {
       }
   
       // Return the updated user as the response
+      
       res.redirect("/profile");
       
       

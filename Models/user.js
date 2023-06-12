@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   userName: { type: String, unique: true },
   name: { type: String },
+  bio: { type: String },
   email: { type: String, unique: true },
   bookClubs:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Club' }],
   currentBook: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
