@@ -11,7 +11,14 @@
                 <p> your actual name is <%= user.name %></p>
                 <p>my email is <%= user.email  %></p>
                 <p>current book(s)</p>
-                <p>these are my clubs: <%= user.bookClubs  %></p>
+                <p>these are my clubs: 
+                    <ul>
+                    <% for( let i = 0; i < user.bookClubs.length; i++ ) { %>
+                
+                     <li><a href="/bookclubPage/<%= user.bookClubs[i]._id %>"><%= user.bookClubs[i].name  %> </a></li>
+                     <% } %>
+                    </ul>
+                </p>
                 <p>(friends)?</p>
                 <p>user since: <%= user.joinDate %></p>
 

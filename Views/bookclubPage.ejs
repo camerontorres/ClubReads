@@ -1,0 +1,106 @@
+<%- include('partials/header') -%>
+<div class="container-fluid bg-white headerGap" style="padding: 0;">
+  <div class="row p-0 m-0" style="min-height: 500px; width: 100vw;">
+
+    <p> you're viewing the page for <%= bookclub.name %></p>
+
+        <ul>
+            <li><%= bookclub.desc %></li>
+            <li>
+                <%= bookclub.members ? 'Members: ' : 'No members yet!' %>
+                <% if (bookclub.members && bookclub.members.length > 0) { %>
+                  <% for (let i = 0; i < bookclub.members.length; i++) { %>
+                    <a href="/profile/<%= bookclub.members[i]._id %>"><%= bookclub.members[i].name %></a>
+                    <% if (i < bookclub.members.length - 1) { %>
+                      ,
+                    <% } %>
+                  <% } %>
+                <% } %>
+              </li>
+            <li><%= bookclub.mod ? bookclub.mod.name + ' is a mod' : 'No mod assigned' %> </li>
+
+            <li>
+                <% if (bookclub.currentBook) { %>
+                  <%= bookclub.currentBook %>
+                <% } else { %>
+                  We're not reading anything! <a href="#" class="btn btn-primary">Add a book</a>
+                <% } %>
+              </li>
+
+              <li>
+                <% if (bookclub.nextBook) { %>
+                  <%= bookclub.nextBook %>
+                <% } else { %>
+                  We're not reading anything! <a href="#" class="btn btn-primary">Add the next book!</a>
+                <% } %>
+              </li>
+
+            <li> <% if (bookclub.created_at) { %>
+                    <% const createdAt = new Date(bookclub.created_at); %>
+                    we've been a club since <%= createdAt.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %>
+                <% } %>
+            </li>
+
+        </ul>
+       <div>
+
+        <!--  BUTTONS-->
+        <a  class="btn btn-primary" href="#">join club</a>
+
+
+        <div>
+            <button type="button" class="clubUpdateBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#clubModal">
+                edit info
+            </button>
+        </div>
+        <!--modal starts-->
+
+        <div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clubModalLabel">Edit info</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+
+                <div class="modal-body">
+                    <form action="/bookclubPage/<%= bookclub._id %>" method="POST" >
+                        <input type="hidden" name="_method" value="PUT">
+                   <label for="imgUpload" class="form-label">Profile Picture</label>
+                    <input type="file" class="form-control" id="clubPicUpload" name="profilePic">      <!---   enctype="multipart/form-data"-->
+
+                    
+                        <label for="nameChange" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="clubNameChange" name="name">
+
+                        <label for="bioChange" class="form-label">Bio</label>
+                        <input type="text" class="form-control" id="clubBioChange" name="bio">
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                    <button type="submit" class="btn btn-primary" value="Save changes">Save changes</button> 
+                </div>
+                </form>
+                </div>
+            </div>
+            </div> 
+            
+            <!--modal ends-->
+
+
+        <a  class="btn btn-danger" href="#">leave club</a>
+       </div>
+       <!--  BUTTON END-->
+
+
+        
+
+      
+  </div>
+  <a class="btn btn-primary" href="/bookclubs">back to clubs</a>
+</div>
+
+<%- include ('partials/footer.ejs') %>
