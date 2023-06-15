@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const User = require("../Models/user");
 const Club = require("../Models/bookclub");
+const Book = require("../Models/book");
 
 
 
@@ -38,18 +39,77 @@ module.exports = {
         }
       },
 
+      getViewProfile: async (req, res, next) => {
+        try {
+
+            const user = await User.findById(req.params._id)
+            
+    
+            res.render("profileView.ejs", { user: user });
+        } catch (err) {
+          return next(err);
+        }
+      },
+
 
       getBookclubPage: async (req, res, next) => {
         try {
-
+           
             const bookclub = await Club.findById(req.params._id)
             .populate('members', 'name userName')
             .populate('mod', 'name')
             .exec();
+            const user = await User.findById(req.user._id)
     
-            res.render("bookclubPage.ejs", { bookclub: bookclub });
+            res.render("bookclubPage.ejs", { bookclub: bookclub, user: user });
         } catch (err) {
           return next(err);
+        }
+      },
+
+      joinClub: async (req, res, next) => {
+        try {
+          const userId = req.user._id; // Assuming you're using passport for authentication
+          const clubId = req.params._id;
+      
+          // Find the user and club by their IDs
+          const user = await User.findById(userId);
+          const club = await Club.findById(clubId);
+      
+          // Add the user to the club's members array
+          club.members.push(userId);
+          await club.save();
+      
+          // Add the club to the user's bookClubs array
+          user.bookClubs.push(clubId);
+          await user.save();
+      
+          res.redirect("/bookclubPage/" + clubId);
+        } catch (err) {
+          next(err);
+        }
+      },
+
+      leaveClub: async (req, res, next) => {
+        try {
+          const userId = req.user._id; // Assuming you're using passport for authentication
+          const clubId = req.params._id;
+      
+          // Find the user and club by their IDs
+          const user = await User.findById(userId);
+          const club = await Club.findById(clubId);
+      
+          // Remove the user from the club's members array
+          club.members.pull(userId);
+          await club.save();
+      
+          // Remove the club from the user's bookClubs array
+          user.bookClubs.pull(clubId);
+          await user.save();
+      
+          res.redirect("/bookclubPage/" + clubId);
+        } catch (err) {
+          next(err);
         }
       },
 
@@ -83,6 +143,63 @@ module.exports = {
           return next(err);
         }
       },
+      addBook: async (req, res, next) => {
+        try {
+            console.log("addBook route reached");
+            const bookData = await fetchBookData(isbn);
+          const userId = req.user._id; // Assuming you're using passport for authentication
+          const clubId = req.params._id;
+      
+          // Find the user and club by their IDs
+          const user = await User.findById(userId);
+          const club = await Club.findById(clubId);
+
+          console.log("userId:", user); // Add this line
+          console.log("clubId:", club); // Add this line
+      
+          // Obtain the book data from the Open Library API
+          // Assuming you have access to the book data as `bookData`
+      
+          // Create a new book instance
+          const newBook = new Book({
+            title: bookData.title,
+            author: bookData.authors.join(", "),
+            url: bookData.preview_url,
+            num_pages: bookData.number_of_pages,
+            editions: bookData.edition_count,
+            cover_image: bookData.cover ? bookData.cover.large : "coverDefault.jpg",
+          });
+      
+          // Save the new book to the database
+          newBook.save((err, savedBook) => {
+            if (err) {
+              // Handle the error
+              console.error(err);
+            } else {
+              // Update the book club's currentBook field with the new book ID
+              Club.findByIdAndUpdate(
+                clubId,
+                { currentBook: savedBook._id },
+                (err) => {
+                  if (err) {
+                    // Handle the error
+                    console.error(err);
+                  } else {
+                    // Book and book club update was successful
+                    // Redirect or send a response indicating success
+                    res.redirect("/bookclubPage/" + clubId);
+                  }
+                }
+              );
+            }
+          });
+        } catch (err) {
+          next(err);
+        }
+      },
+
+
+
       updateBookClub: async (req, res, next) => {
         try {
           const bookclub = await Club.findById(req.params._id);

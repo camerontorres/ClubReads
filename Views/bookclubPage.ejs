@@ -10,7 +10,7 @@
                 <%= bookclub.members ? 'Members: ' : 'No members yet!' %>
                 <% if (bookclub.members && bookclub.members.length > 0) { %>
                   <% for (let i = 0; i < bookclub.members.length; i++) { %>
-                    <a href="/profile/<%= bookclub.members[i]._id %>"><%= bookclub.members[i].name %></a>
+                    <a href="/profileView/<%= bookclub.members[i]._id %>"><%= bookclub.members[i].name %></a>
                     <% if (i < bookclub.members.length - 1) { %>
                       ,
                     <% } %>
@@ -23,7 +23,118 @@
                 <% if (bookclub.currentBook) { %>
                   <%= bookclub.currentBook %>
                 <% } else { %>
-                  We're not reading anything! <a href="#" class="btn btn-primary">Add a book</a>
+                  We're not reading anything! 
+                  <!--edit club modal starts-->
+                  <div>
+                    <button type="button" id="addBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addBookModal">
+                        add book!
+                    </button>
+                </div>
+                <!--edit club modal starts-->
+        
+                <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addBookModalLabel">Edit info</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+        
+        
+                        <div class="modal-body">
+                            <form action="/bookclubPage/<%= bookclub._id %>/addBook" method="POST">
+                              <input type="hidden" name="_method" value="PUT">
+                              <div class="modal-body">
+                                <h1>Book Search</h1>
+                                <input type="text" id="search-input" placeholder="Enter book ISBN">
+                                <button onclick="searchBooks()">Search</button>
+                                <div id="book-info"></div>
+                              </div>
+                              
+                          
+                              <!--SCRIPT START-->
+                              <script>
+                                var isbn; // Declare the isbn variable outside the function scope
+                          
+                                function searchBooks() {
+                                  event.preventDefault();
+                          
+                                  isbn = document.getElementById('search-input').value; // Assign the value to the isbn variable
+                          
+                                  var url = 'https://openlibrary.org/api/books?bibkeys=ISBN:' + encodeURIComponent(isbn) + '&format=json&jscmd=data';
+                                  fetch(url)
+                                    .then(function (response) {
+                                      return response.json();
+                                    })
+                                    .then(function (data) {
+                                      processBooks(data);
+                                    })
+                                    .catch(function (error) {
+                                      console.log('Error:', error);
+                                    });
+                                }
+                          
+                                function processBooks(data) {
+                                  var bookInfoElement = document.getElementById('book-info');
+                                  var submitButton = document.getElementById('addBookButton');
+                          
+                                  // Check if the response contains book data
+                                  if (Object.keys(data).length > 0) {
+                                    var bookData = data[Object.keys(data)[0]];
+                          
+                                    // Extract the desired information
+                                    var title = bookData.title;
+                                    var authors = bookData.authors.map(function (author) {
+                                      return author.name;
+                                    });
+                                    var editions = bookData.edition_count;
+                                    
+                                    var num_pages = bookData.number_of_pages;
+                                    var subjects = bookData.subjects.map(function (subject) {
+                                      return subject.name;
+                                    });
+                                    var cover_image = bookData.cover ? '<img src="' + bookData.cover.large + '">' : 'N/A';
+                                 
+
+                                    // Extract the Amazon ID from the identifiers field
+                                    
+                          
+                                    // Update the book information inside the modal
+                                    bookInfoElement.innerHTML = '<p><strong>Title:</strong> ' + title + '</p>' +
+                                      '<p><strong>Authors:</strong> ' + authors.join(', ') + '</p>' +
+                                      '<p><strong>Editions:</strong> ' + editions + '</p>' +
+                                      '<p><strong>Number of Pages:</strong> ' + num_pages + '</p>' +
+                                      '<p><strong>ISBN:</strong> ' + isbn + '</p>' +
+                                      
+                                      
+                                      '<p><strong>Subjects:</strong> ' + subjects.join(', ') + '</p>' +
+                                      '<p><strong>Cover Image:</strong> <br>' + cover_image + '</p>';
+
+                                      
+                                      submitButton.classList.remove('disabled');
+
+                                  } else {
+                                    // Display a message if no book is found
+                                    bookInfoElement.innerHTML = 'No book found for the given ISBN.';
+                                    submitButton.classList.add('disabled');
+                                  }
+                                }
+                              </script>
+                              <!-- SCRIPT END-->
+                            </div>
+                          
+                            <div class="modal-footer" id="addBookFooter">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                              
+                                <button type="submit"  id="addBookButton" class="btn btn-primary" value="Save changes">Add as current book</button> 
+                               
+                             
+                               
+                              
+                            </div>
+                          </form>
+                          
+                        </div>
                 <% } %>
               </li>
 
@@ -31,7 +142,14 @@
                 <% if (bookclub.nextBook) { %>
                   <%= bookclub.nextBook %>
                 <% } else { %>
-                  We're not reading anything! <a href="#" class="btn btn-primary">Add the next book!</a>
+                    We havent selected a new book! 
+                    <!--next book modal starts-->
+                    <div>
+                      <button type="button" class="addNextBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addNextBookModal">
+                          add book!
+                      </button>
+                  </div>
+                  <!--next book modal starts-->
                 <% } %>
               </li>
 
@@ -45,7 +163,9 @@
        <div>
 
         <!--  BUTTONS-->
-        <a  class="btn btn-primary" href="#">join club</a>
+        <form action="/bookclubPage/<%= bookclub._id %>/join" method="POST">
+            <button type="submit" class="btn btn-primary">Join Club</button>
+          </form>
 
 
         <div>
@@ -53,7 +173,7 @@
                 edit info
             </button>
         </div>
-        <!--modal starts-->
+        <!--edit club modal starts-->
 
         <div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -91,7 +211,9 @@
             <!--modal ends-->
 
 
-        <a  class="btn btn-danger" href="#">leave club</a>
+            <form action="/bookclubPage/<%= bookclub._id %>/leave" method="POST">
+                <button type="submit" class="btn btn-danger">Leave Club</button>
+              </form>
        </div>
        <!--  BUTTON END-->
 
@@ -104,3 +226,36 @@
 </div>
 
 <%- include ('partials/footer.ejs') %>
+
+
+<!---New USER LIST-->
+
+<!---<li>
+    <%=// bookclub.members ? 'Members: ' : 'No members yet!' %>
+    <%// if (bookclub.members && bookclub.members.length > 0) { %>
+      <%// for (let i = 0; i < bookclub.members.length; i++) { %>
+        <%// if (bookclub.members[i]._id.toString() === user._id.toString()) { %>
+          <%=// user.name %>
+        <%// } else { %>
+          <a href="/profileView/<%=// bookclub.members[i]._id %>"><%=// bookclub.members[i].name %></a>
+          <%// if (i < bookclub.members.length - 1) { %>
+            ,
+          <%// } %>
+        <%// } %>
+      <%// } %>
+    <%// } %>
+  </li> --->
+
+
+<!---OLD USER LIST-->
+ <!--- <li>
+    <%=// bookclub.members ? 'Members: ' : 'No members yet!' %>
+    <%// if (bookclub.members && bookclub.members.length > 0) { %>
+      <%// for (let i = 0; i < bookclub.members.length; i++) { %>
+        <a href="/profileView/<%=// bookclub.members[i]._id %>"><%=// bookclub.members[i].name %></a>
+        <% //if (i < bookclub.members.length - 1) { %>
+          ,
+        <%// } %>
+      <%// } %>
+    <%// } %>
+  </li> -->

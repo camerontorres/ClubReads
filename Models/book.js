@@ -4,12 +4,12 @@ const bookSchema = new mongoose.Schema({
   title: { type: String, required: true },
   author: { type: String, required: true },
   url: { type: String},
+  num_pages: {type: String},
+  editions: {type: String},
   
-  coverPic: { type: String, default: 'coverDefault.jpg' },
+  cover_image: { type: String, default: 'coverDefault.jpg' },
   
   
-  
-
 });
 
 
