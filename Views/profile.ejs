@@ -10,7 +10,13 @@
                 <p> your username is <%= user.userName %></p>
                 <p> your actual name is <%= user.name %></p>
                 <p>my email is <%= user.email  %></p>
-                <p>current book(s)</p>
+                <p>currently reading: <%=user.currentBooks.title %>
+                    <ul>
+                        <% for( let i = 0; i < user.currentBooks.length; i++ ) { %>
+                    
+                         <li><%= user.currentBooks[i].title  %> </a></li>
+                         <% } %>
+                        </ul></p>
                 <p>these are my clubs: 
                     <ul>
                     <% for( let i = 0; i < user.bookClubs.length; i++ ) { %>

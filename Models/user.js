@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   bio: { type: String },
   email: { type: String, unique: true },
   bookClubs:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Club' }],
-  currentBook: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
+  currentBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   finishedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   profilePic: { type: String, default: 'default.jpg' },
   password: { type: String, required: true },

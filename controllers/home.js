@@ -16,17 +16,18 @@ module.exports = {
       res.render("signUp.ejs");
     },
 
-    getProfile: async (req, res) => {
+    getProfile: async (req, res, next) => {
         try {
           const user = await User.findById(req.user._id)
             .populate('bookClubs', 'name')
+            .populate('currentBooks', 'title')
             .exec();
       
           res.render("profile.ejs", { user: user });
         } catch (err) {
-          return next(err);
-        }
-      },
+            return next(err);
+          }
+        },
 
       getBookclubs: async (req, res, next) => {
         try {
@@ -56,12 +57,17 @@ module.exports = {
         try {
            
             const bookclub = await Club.findById(req.params._id)
+            
             .populate('members', 'name userName')
             .populate('mod', 'name')
+            .populate('currentBook', 'title')
+            .populate('nextBook', 'title')
             .exec();
             const user = await User.findById(req.user._id)
+            console.log(bookclub)
+            
     
-            res.render("bookclubPage.ejs", { bookclub: bookclub, user: user });
+            res.render("bookclubPage.ejs", { bookclub: bookclub, user: user, });
         } catch (err) {
           return next(err);
         }
@@ -75,6 +81,7 @@ module.exports = {
           // Find the user and club by their IDs
           const user = await User.findById(userId);
           const club = await Club.findById(clubId);
+          
       
           // Add the user to the club's members array
           club.members.push(userId);
@@ -83,6 +90,11 @@ module.exports = {
           // Add the club to the user's bookClubs array
           user.bookClubs.push(clubId);
           await user.save();
+
+          if (club.currentBook) {
+            user.currentBooks.push(club.currentBook);
+            await user.save();
+          }
       
           res.redirect("/bookclubPage/" + clubId);
         } catch (err) {
@@ -105,6 +117,10 @@ module.exports = {
       
           // Remove the club from the user's bookClubs array
           user.bookClubs.pull(clubId);
+          await user.save();
+          if (club.currentBook) {
+            user.currentBooks.pull(club.currentBook);
+          }
           await user.save();
       
           res.redirect("/bookclubPage/" + clubId);
@@ -143,10 +159,15 @@ module.exports = {
           return next(err);
         }
       },
+
+
       addBook: async (req, res, next) => {
         try {
             console.log("addBook route reached");
-            const bookData = await fetchBookData(isbn);
+            
+            const bookData = req.body;
+            
+
           const userId = req.user._id; // Assuming you're using passport for authentication
           const clubId = req.params._id;
       
@@ -162,38 +183,71 @@ module.exports = {
       
           // Create a new book instance
           const newBook = new Book({
-            title: bookData.title,
-            author: bookData.authors.join(", "),
+            title: [bookData.title],
+            author: bookData.authors,
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
             cover_image: bookData.cover ? bookData.cover.large : "coverDefault.jpg",
           });
       
-          // Save the new book to the database
-          newBook.save((err, savedBook) => {
-            if (err) {
-              // Handle the error
-              console.error(err);
-            } else {
-              // Update the book club's currentBook field with the new book ID
-              Club.findByIdAndUpdate(
-                clubId,
-                { currentBook: savedBook._id },
-                (err) => {
-                  if (err) {
-                    // Handle the error
-                    console.error(err);
-                  } else {
-                    // Book and book club update was successful
-                    // Redirect or send a response indicating success
-                    res.redirect("/bookclubPage/" + clubId);
-                  }
-                }
-              );
-            }
+            const savedBook = await newBook.save();
+            club.currentBook = savedBook;
+            await club.save();
+            user.currentBooks.push(savedBook);
+            await user.save()
+
+              
+                
+
+                res.redirect("/bookclubPage/" + clubId);
+                }catch (err) {
+          next(err);
+        }
+      },
+
+
+      addNextBook: async (req, res, next) => {
+        try {
+            console.log("addBook route reached");
+            
+            const bookData = req.body;
+            
+
+          const userId = req.user._id; // Assuming you're using passport for authentication
+          const clubId = req.params._id;
+      
+          // Find the user and club by their IDs
+          const user = await User.findById(userId);
+          const club = await Club.findById(clubId);
+
+          console.log("userId:", user); // Add this line
+          console.log("clubId:", club); // Add this line
+      
+          // Obtain the book data from the Open Library API
+          // Assuming you have access to the book data as `bookData`
+      
+          // Create a new book instance
+          const newBook = new Book({
+            title: [bookData.title],
+            author: bookData.authors,
+            url: bookData.preview_url,
+            num_pages: bookData.number_of_pages,
+            editions: bookData.edition_count,
+            cover_image: bookData.cover ? bookData.cover.large : "coverDefault.jpg",
           });
-        } catch (err) {
+      
+            const savedBook = await newBook.save();
+            club.nextBook = savedBook;
+            await club.save();
+
+            
+
+              
+                
+
+                res.redirect("/bookclubPage/" + clubId);
+                }catch (err) {
           next(err);
         }
       },
