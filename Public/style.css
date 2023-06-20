@@ -1,0 +1,103 @@
+:root {
+    --green: #7FB099;
+    --beige: #CCB899;
+    --red: #E17571; 
+    --blue: #3B4568;
+    --white: #FBFBFB;/* Define the primary color */
+  }
+  
+
+  .jumbotron{
+    background-size:cover;  
+    margin-bottom: 0;
+
+    background-repeat: no-repeat;
+    
+    min-height: 75vh; 
+    position: relative;
+
+    z-index: 1;
+  }
+ 
+  
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, #00000088 30%, #ffffff44 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .overlay h3,
+.overlay .row {
+  position: relative;
+  z-index: 3;
+}
+.content-container{
+    position: relative;
+    z-index: 3;
+
+}
+.footer{
+    
+    object-position: bottom;
+    height: 200px;
+}
+
+.inFront{
+    z-index: 3;
+}
+.signUpBg {
+    object-position: bottom;
+
+}
+
+.loginImage{
+    background-size: contain;
+}
+
+  
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .btn{
+    margin: 10px;
+  }
+
+  .navbar{
+    background-color: var(--green);
+    height: 5em;
+  }
+
+  .jumbotron{
+    background-color: var(--white);
+    height: 50vh;
+  }
+
+  .profPic{
+    object-fit: cover;
+    height: 13em;
+    width: 13em;
+    border: solid 5px #3B4568;
+    border-radius: 50%;
+
+  }
+
+  @media (min-width:600px){
+    .profPic{
+        object-fit: cover;
+        height: 20em;
+        width: 20em;
+      }
+
+  }
+  

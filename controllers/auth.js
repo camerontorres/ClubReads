@@ -140,6 +140,7 @@ exports.postSignUp = async (req, res, next) => {
         userName: req.body.userName,
         email: req.body.email,
         password: req.body.password,
+        
       });
   
       const existingUser = await User.findOne({

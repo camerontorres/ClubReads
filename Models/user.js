@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   bookClubs:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Club' }],
   currentBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   finishedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
-  profilePic: { type: String, default: 'default.jpg' },
+  profilePic: { type: String, default: '/Public/images/default.jpg' },
   password: { type: String, required: true },
   joinDate: { type: Date, required: true, default: Date.now }
   

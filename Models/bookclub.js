@@ -6,7 +6,7 @@ const clubSchema = new mongoose.Schema({
   members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   finishedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   currentBook: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
-  clubPic: { type: String, default: 'clubDefault.jpg' },
+  clubPic: { type: String, default: '/public/images/clubDefault.jpg' },
   desc: { type: String},
   nextBook: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
   mod: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

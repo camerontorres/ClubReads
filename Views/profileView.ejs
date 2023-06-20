@@ -10,7 +10,7 @@
                 <p> Their name is <%= user.userName %></p>
                 <p> Their actual name is <%= user.name %></p>
             
-                <p> Their current book(s): <%= user.currentBook ? user.currentBook : 'not reading anything at the moment!' %></p>
+                <p> Their current book(s): <%= user.currentBook ? user.currentBook.title : 'not reading anything at the moment!' %></p>
                 <p>Their clubs: 
                     <ul><%if ( !user.bookClubs ) { %>
                         <p>Not in a club yet!</p>

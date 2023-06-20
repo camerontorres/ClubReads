@@ -44,6 +44,9 @@ module.exports = {
         try {
 
             const user = await User.findById(req.params._id)
+            .populate('bookClubs', 'name')
+            .populate('currentBooks', 'title')
+            .exec();
             
     
             res.render("profileView.ejs", { user: user });
