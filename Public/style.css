@@ -59,8 +59,13 @@
 .loginImage{
     background-size: contain;
 }
-
-  
+ ul{
+    padding: 0;
+ }
+  li{
+    list-style: none;
+    text-decoration: none;
+  }
 
   .container {
     display: flex;

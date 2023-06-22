@@ -63,7 +63,7 @@ module.exports = {
             
             .populate('members', 'name userName')
             .populate('mod', 'name')
-            .populate('currentBook', 'title')
+            .populate('currentBook', 'title cover_image')
             .populate('nextBook', 'title')
             .exec();
             const user = await User.findById(req.user._id)
@@ -191,7 +191,7 @@ module.exports = {
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
-            cover_image: bookData.cover ? bookData.cover.large : "coverDefault.jpg",
+            cover_image: bookData.cover ? bookData.cover_image : "coverDefault.jpg",
           });
       
             const savedBook = await newBook.save();

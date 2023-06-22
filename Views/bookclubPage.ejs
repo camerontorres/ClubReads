@@ -1,11 +1,11 @@
 <%- include('partials/header') -%>
 <div class="container-fluid bg-white headerGap" style="padding: 0;">
-  <div class="row p-0 m-0" style="min-height: 500px; width: 100vw;">
+  <div class="row p-0 m-0  d-flex align-items-center justify-content-center" style="min-height: 500px; width: 100vw;">
+        <div class="col-md-6 mt-4 d-flex flex-column  align-items-center text-center" >
+    <h1><%= bookclub.name %></h1>
+    <img  class="profPic mb-3" src='<%= bookclub.clubPic %>'>
 
-    <h1>  <%= bookclub.name %></h1>
-    <img  class="profPic" src='<%= bookclub.clubPic %>'>
-
-        <ul>
+        <ul id="">
             <li><%= bookclub.desc %></li>
             <li>
                 <%= bookclub.members ? 'Members: ' : 'No members yet!' %>
@@ -18,11 +18,12 @@
                   <% } %>
                 <% } %>
               </li>
-            <li><%= bookclub.mod ? bookclub.mod.name + ' is a mod' : 'No mod assigned' %> </li>
-
+            <li><%= bookclub.mod ? bookclub.mod.name + ' is a mod' : 'No mod assigned' %></li>
+        </div >
+        <div class="col-md-6  d-flex flex-column  align-items-center text-center">
             <li>
                 <% if (bookclub.currentBook) { %>
-                  <%= bookclub.currentBook.title %>
+                  <%= 'Our current book:' +  bookclub.currentBook.title %>
                 <% } else { %>
                   We're not reading anything! 
                   <!--edit club modal starts-->
@@ -289,7 +290,9 @@
             </li>
 
         </ul>
-       <div>
+
+    </div>
+       <div id="bookClubButtonsGroup">
 
         <!--  BUTTONS-->
         <% if (!user.bookClubs.includes(bookclub._id)) { %>
