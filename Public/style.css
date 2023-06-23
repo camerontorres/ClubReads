@@ -45,7 +45,7 @@
 .footer{
     
     object-position: bottom;
-    height: 200px;
+    
 }
 
 .inFront{
@@ -99,7 +99,18 @@
   .bookPreview{
     height: 300px;
     width: 200px;
+    display: block;
+        margin-left: auto;
+        margin-right: auto;
   }
+  #pageLeft{
+    min-height: 600px;
+  }
+
+  #pageRight{
+    min-height: 600px;
+  }
+  
 
   @media (min-width:600px){
     .profPic{
@@ -107,6 +118,17 @@
         height: 20em;
         width: 20em;
       }
+      
 
   }
   
+
+  .addBookBtn {
+    display: none; /* Hide the button by default */
+}
+
+.user-member .addBookBtn {
+    display: block; /* Show the button if the user is a member */
+}
+
+ 

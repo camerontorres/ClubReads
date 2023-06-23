@@ -10,7 +10,8 @@ const clubSchema = new mongoose.Schema({
   desc: { type: String},
   nextBook: { type: mongoose.Schema.Types.ObjectId, ref: 'Book' },
   mod: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  created_at    : { type: Date, required: true, default: Date.now },
+  created_at: { type: Date, required: true, default: Date.now },
+  discordURL:{ type: String},
   
   
 

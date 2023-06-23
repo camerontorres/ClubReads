@@ -7,7 +7,7 @@ const bookSchema = new mongoose.Schema({
   num_pages: {type: String},
   editions: {type: String},
   
-  cover_image: { type: String, default: 'coverDefault.jpg' },
+  cover_image: { type: String, default: '/Public/images/coverDefault.jpg' },
   
   
 });

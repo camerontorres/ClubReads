@@ -63,8 +63,8 @@ module.exports = {
             
             .populate('members', 'name userName')
             .populate('mod', 'name')
-            .populate('currentBook', 'title cover_image')
-            .populate('nextBook', 'title cover_image')
+            .populate('currentBook', 'title cover_image author url')
+            .populate('nextBook', 'title cover_image author url')
             .exec();
             const user = await User.findById(req.user._id)
             console.log(bookclub)
@@ -187,7 +187,7 @@ module.exports = {
           // Create a new book instance
           const newBook = new Book({
             title: [bookData.title],
-            author: bookData.authors,
+            author: [bookData.authors],
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
@@ -238,7 +238,7 @@ module.exports = {
           // Create a new book instance
           const newBook = new Book({
             title: [bookData.title],
-            author: bookData.authors,
+            author: [bookData.authors],
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,

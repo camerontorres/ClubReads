@@ -1,33 +1,49 @@
 <%- include('partials/header') -%>
 <div class="container-fluid bg-white headerGap" style="padding: 0;">
   <div class="row p-0 m-0" style="min-height: 500px; width: 100vw;">
-      <div class="col-6 p-0">
-          <div class="mt-5 mb-5">
-            <div class="mb-3 d-flex flex-column">
-                <p>heyoooo</p>
+      <div class="col-6 p-0 d-flex justify-content-center align-items-center">
+          <div class="text-center">
+            <div class="mt-5 mb-5">
+                <div class="mb-3">
+                <img  class="profPic" src='<%= user.profilePic %>'>
+                
+                <h1><%= user.name %></h1>
+                <p>user since: <%= user.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <p>prof pic here: <%= user.profilefPic  %></p>
-                <p> Their name is <%= user.userName %></p>
-                <p> Their actual name is <%= user.name %></p>
-            
-                <p> Their current book(s): <%= user.currentBook ? user.currentBook.title : 'not reading anything at the moment!' %></p>
-                <p>Their clubs: 
-                    <ul><%if ( !user.bookClubs ) { %>
-                        <p>Not in a club yet!</p>
-                    <% } else {%> 
-                     
+
+          <!--break-->
+          <div class="col-6 p-0">
+            <div class="mt-5 mb-5">
+              <div class="mb-3 d-flex flex-column">
+                
+                <p>currently reading: <%=user.currentBooks.title %>
+                    <ul>
+                        <% for( let i = 0; i < user.currentBooks.length; i++ ) { %>
+                    
+                         <li><%= user.currentBooks[i].title  %> </a></li>
+                         <% } %>
+                        </ul></p>
+                <p><% if (!user.bookClubs) { %>
+                    <div>
+                        <a href="/bookclubs" class="btn btn-danger"> join a club, nerd</a>
+                    </div>
+                 
+                <% }else { %>these are my clubs: 
+                    <ul>
                     <% for( let i = 0; i < user.bookClubs.length; i++ ) { %>
                 
-                     <li><a href="/bookclubPage/<%= user.bookClubs[i]._id %>"><%= user.bookClubs[i].name  %> </a></li>
+                     <li class=" clubList"><a href="/bookclubPage/<%= user.bookClubs[i]._id %>"><%= user.bookClubs[i].name  %> </a></li>
                      <% } %>
-                     <%}%>
+                     <% } %>
                     </ul>
                 </p>
-                <p><%= user.friends ? user.friends : 'no friends yet! hahaha' %></p>
-                <p>user since: <%= user.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
+                
+                
 
-               
-             
             
 
             <!----------profPic end----------->
@@ -43,22 +59,7 @@
                   
           <!------------->
       </div>
-      <div class="col-6 p-0">
-        <div class="mt-5 mb-5">
-          <div class="align-self-center text-center">
-            
-            <div>
-                <a href="/bookclubs" class="btn btn-danger"> view the clubs</a>
-            </div>
-            
-           
-
-          
-        </div>
-        
-      </div>
       
-    </div>
   </div>
 </div>
 

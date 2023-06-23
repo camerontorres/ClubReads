@@ -1,7 +1,7 @@
 <%- include('partials/header') -%>
-<div class="container-fluid bg-white headerGap" style="padding: 0;">
-  <div class="row p-0 m-0  d-flex align-items-center justify-content-center" style="min-height: 500px; width: 100vw;">
-        <div class="col-md-6 mt-4 d-flex flex-column  align-items-center text-center" >
+<div class="container-fluid bg-white headerGap user-member" style="padding: 0;">
+  <div  id="topRow" class="row p-0 m-0  d-flex align-items-center justify-content-center" style="min-height: 500px; width: 100vw;">
+    <div  id="pageLeft" class="col-md-6 mt-4 d-flex flex-column  align-items-center text-center" >
     <h1><%= bookclub.name %></h1>
     <img  class="profPic mb-3" src='<%= bookclub.clubPic %>'>
 
@@ -20,19 +20,62 @@
               </li>
             <li><%= bookclub.mod ? bookclub.mod.name + ' is a mod' : 'No mod assigned' %></li>
         </div >
-        <div class="col-md-6  d-flex flex-column  align-items-center text-center">
-            <li>
+        <div id="pageRight" class="col-md-6  d-flex flex-column  align-items-center text-center">
+<!--CURRENT book-->  
+                        
                 <% if (bookclub.currentBook) { %>
-                   Our current book: <img  class="bookPreview" src="<%= bookclub.currentBook.cover_image %>" alt=""> <%=bookclub.currentBook.title %>
+                   <p>Our current book:</p> <img  class="bookPreview" src="<%= bookclub.currentBook.cover_image %>" alt=""> <h4><%=bookclub.currentBook.title %></h4>
+                   <p>By <%= bookclub.currentBook.author %> </p>
+                   <% if (bookclub.currentBook.url) { %>
+                    <a href="#"><p>Find it here</p></a>
+                    <% } %>
+                    
+                       
+                            <button type="button" id="addBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">add shopping link</button>
+                            <button type="button" id="finishBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#finishModal">Finish book</button>
+                            
+                            
+
+
+                                <div class="modal fade" id="addCurrentURL" tabindex="-1" role="dialog" aria-labelledby="currentURLModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="currentURLModalLabel">Edit book info</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+
+                                                <div class="modal-body">
+                                                    <form action="/user/profile/<%= user._id %>" method="POST" >
+                                                        <input type="hidden" name="_method" value="PUT">
+                                 
+                                                        <label for="nameChange" class="form-label">add link</label>
+                                                        <input type="text" class="form-control" id="currentBookURL" name="url">
+                                                </div>
+
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                                                    <button type="submit" class="btn btn-primary" value="Save changes">Save changes</button> 
+                                                </div>
+                                                </form>
+
+                                        </div>
+                                    </div>
+                                    </div>
+                            
+                        
                 <% } else { %>
                   We're not reading anything! 
-                  <!--edit club modal starts-->
+                  <!--add book button starts-->
                   <div>
                     <button type="button" id="addBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addBookModal">
                         add book!
                     </button>
                 </div>
-                <!--edit club modal starts-->
+
+                <!--add book modal starts-->
         
                 <div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -92,9 +135,7 @@
                                     var editions = bookData.edition_count;
                                     
                                     var num_pages = bookData.number_of_pages;
-                                    var subjects = bookData.subjects.map(function (subject) {
-                                      return subject.name;
-                                    });
+                                    
                                     var cover_image = bookData.cover ? '<img src="' + bookData.cover.large + '">' : 'N/A';
                                  
 
@@ -108,14 +149,14 @@
                                       '<p><strong>Editions:</strong> ' + editions + '</p>' +
                                       '<p><strong>Number of Pages:</strong> ' + num_pages + '</p>' +
                                       '<p><strong>ISBN:</strong> ' + isbn + '</p>' +
-                                      '<p><strong>Subjects:</strong> ' + subjects.join(', ') + '</p>' +
+                                      
                                       '<p><strong>Cover Image:</strong> <br>' + cover_image + '</p>'+
 
                                       '<input type="hidden" id="Bauthor" name="author" value="' + authors.join(', ') + '">' +
                                       '<input type="hidden" id="Btitle" name="title" value="' + title + '">' +
                                         '<input type="hidden" id="Bedition" name="num_pages" value=' + num_pages + '>' +
                                         '<input type="hidden" id="Bnum_pages" name="isbn" value=' + isbn + '>' +
-                                        '<input type="hidden" id="Bsubjects" name="subjects" value=' + subjects.join(', ') + '>' +
+                                        
                                         '<input type="hidden" id="Bcover_image" name="cover_image" value=' + (bookData.cover && bookData.cover.large ? bookData.cover.large : 'N/A') + '>' ;
 
 
@@ -149,11 +190,79 @@
                           
                         </div>
                 <% } %>
-              </li>
+                
+                </div>
+            
+            </div>
+        </div>
+              
+        
+         <div class="nextBook container-fluid row m-0 p-0">
+  <!--Finished books--><div class="col-md-6 ">
+                           <div class="m-5">
+                                <% if (bookclub.finishedBooks == 0 || null) { %>
+                                    <p class="text-center">We haven't finished any books yet!</p>
+                                    <% } %>
+                                <% if (bookclub.finishedBooks && bookclub.finishedBooks.length > 0) { %>
+                                <% for (let i = 0; i < bookclub.finishedBooks.length; i++) { %>
+                                    <div>
+                                        <%= bookclub.finishedBooks[i].cover_image %>
+                                    <%= bookclub.finishedBooks[i].name %>
 
-              <li>
+                                </div>
+                                    
+                                <% } %>
+                                <% } %>
+                
+                
+                        
+                        </div>
+                    </div>
+<!--next book--> <div class="col-md-6 mt-5 text-center d-flex flex-column align-content-center">
+
                 <% if (bookclub.nextBook) { %>
-                    <img class="bookPreview" src="<%= bookclub.nextBook.cover_image %>" alt=""> <%= bookclub.nextBook.title %> 
+                    <p>Our next Book:</p>
+                    <img class="bookPreview" src="<%= bookclub.nextBook.cover_image %>" alt=""> <%= bookclub.nextBook.title %>
+                    <p>By <%= bookclub.nextBook.author %> </p>
+                    <% if (bookclub.nextBook.url) { %>
+                        <a href="#"><p>Find it here</p></a>
+                        <% } %>
+                        
+                            
+                                <button type="button" id="addBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">edit book info</button>
+                            
+                            
+
+
+                                <div class="modal fade" id="addCurrentURL" tabindex="-1" role="dialog" aria-labelledby="currentURLModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="currentURLModalLabel">Add a shopping link for the book!</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+
+
+                                                <div class="modal-body">
+                                                    <form action="/user/profile/<%= user._id %>" method="POST" >
+                                                        <input type="hidden" name="_method" value="PUT">
+                                 
+                                                        <label for="nameChange" class="form-label">add link</label>
+                                                        <input type="text" class="form-control" id="currentBookURL" name="url">
+                                                </div>
+
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                                                    <button type="submit" class="btn btn-primary" value="Save changes">Save changes</button> 
+                                                </div>
+                                                </form>
+
+                                        </div>
+                                    </div>
+                                    </div>
+                                
+                            
                 <% } else  { %>
                     We dont have anything lined up!
                     <!--edit club modal starts-->
@@ -224,9 +333,7 @@
                                       var editions = bookData.edition_count;
                                       
                                       var num_pages = bookData.number_of_pages;
-                                      var subjects = bookData.subjects.map(function (subject) {
-                                        return subject.name;
-                                      });
+                                      
                                       var cover_image = bookData.cover ? '<img src="' + bookData.cover.large + '">' : 'N/A';
                                    
   
@@ -240,14 +347,14 @@
                                         '<p><strong>Editions:</strong> ' + editions + '</p>' +
                                         '<p><strong>Number of Pages:</strong> ' + num_pages + '</p>' +
                                         '<p><strong>ISBN:</strong> ' + isbn + '</p>' +
-                                        '<p><strong>Subjects:</strong> ' + subjects.join(', ') + '</p>' +
+                                        
                                         '<p><strong>Cover Image:</strong> <br>' + cover_image + '</p>'+
   
                                         '<input type="hidden" id="Bauthor" name="author" value="' + authors.join(', ') + '">' +
                                         '<input type="hidden" id="Btitle" name="title" value="' + title + '">' +
                                           '<input type="hidden" id="Bedition" name="num_pages" value=' + num_pages + '>' +
                                           '<input type="hidden" id="Bnum_pages" name="isbn" value=' + isbn + '>' +
-                                          '<input type="hidden" id="Bsubjects" name="subjects" value=' + subjects.join(', ') + '>' +
+                                          
                                           '<input type="hidden" id="Bcover_image" name="cover_image" value=' + (bookData.cover && bookData.cover.large ? bookData.cover.large : 'N/A') + '>' ;
   
   
@@ -281,7 +388,12 @@
                             
                           </div>
                   <% } %>
-              </li>
+                </div>
+            
+             </div>
+
+            </div>
+        
 
             <li> <% if (bookclub.created_at) { %>
                     <% const createdAt = new Date(bookclub.created_at); %>
@@ -291,7 +403,7 @@
 
         </ul>
 
-    </div>
+    
        <div id="bookClubButtonsGroup">
 
         <!--  BUTTONS-->
@@ -360,7 +472,7 @@
       
   </div>
   <a class="btn btn-primary" href="/bookclubs">back to clubs</a>
-</div>
+
 
 <%- include ('partials/footer.ejs') %>
 
