@@ -45,7 +45,7 @@ module.exports = {
 
             const user = await User.findById(req.params._id)
             .populate('bookClubs', 'name')
-            .populate('currentBooks', 'title')
+            .populate('currentBooks', 'title cover_image')
             .exec();
             
     
@@ -64,7 +64,7 @@ module.exports = {
             .populate('members', 'name userName')
             .populate('mod', 'name')
             .populate('currentBook', 'title cover_image')
-            .populate('nextBook', 'title')
+            .populate('nextBook', 'title cover_image')
             .exec();
             const user = await User.findById(req.user._id)
             console.log(bookclub)
@@ -78,7 +78,7 @@ module.exports = {
 
       joinClub: async (req, res, next) => {
         try {
-          const userId = req.user._id; // Assuming you're using passport for authentication
+          const userId = req.user._id;
           const clubId = req.params._id;
       
           // Find the user and club by their IDs
@@ -178,11 +178,11 @@ module.exports = {
           const user = await User.findById(userId);
           const club = await Club.findById(clubId);
 
-          console.log("userId:", user); // Add this line
-          console.log("clubId:", club); // Add this line
+          
       
-          // Obtain the book data from the Open Library API
-          // Assuming you have access to the book data as `bookData`
+          // Obtaining the book data from the Open Library API
+          const coverImage = bookData.cover_image
+
       
           // Create a new book instance
           const newBook = new Book({
@@ -191,7 +191,7 @@ module.exports = {
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
-            cover_image: bookData.cover ? bookData.cover_image : "coverDefault.jpg",
+            cover_image: coverImage
           });
       
             const savedBook = await newBook.save();
@@ -224,8 +224,13 @@ module.exports = {
           const user = await User.findById(userId);
           const club = await Club.findById(clubId);
 
-          console.log("userId:", user); // Add this line
-          console.log("clubId:", club); // Add this line
+          //console.log("userId:", user); 
+          //console.log("clubId:", club); 
+
+          const coverImage = bookData.cover_image
+          
+          console.log("bookData.coverImage:",bookData.cover_image)
+
       
           // Obtain the book data from the Open Library API
           // Assuming you have access to the book data as `bookData`
@@ -237,7 +242,7 @@ module.exports = {
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
-            cover_image: bookData.cover ? bookData.cover.large : "coverDefault.jpg",
+            cover_image: coverImage
           });
       
             const savedBook = await newBook.save();

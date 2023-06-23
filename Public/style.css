@@ -96,6 +96,10 @@
     border-radius: 50%;
 
   }
+  .bookPreview{
+    height: 300px;
+    width: 200px;
+  }
 
   @media (min-width:600px){
     .profPic{

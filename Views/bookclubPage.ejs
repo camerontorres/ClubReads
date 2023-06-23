@@ -23,7 +23,7 @@
         <div class="col-md-6  d-flex flex-column  align-items-center text-center">
             <li>
                 <% if (bookclub.currentBook) { %>
-                  <%= 'Our current book:' +  bookclub.currentBook.title %>
+                   Our current book: <img  class="bookPreview" src="<%= bookclub.currentBook.cover_image %>" alt=""> <%=bookclub.currentBook.title %>
                 <% } else { %>
                   We're not reading anything! 
                   <!--edit club modal starts-->
@@ -116,7 +116,7 @@
                                         '<input type="hidden" id="Bedition" name="num_pages" value=' + num_pages + '>' +
                                         '<input type="hidden" id="Bnum_pages" name="isbn" value=' + isbn + '>' +
                                         '<input type="hidden" id="Bsubjects" name="subjects" value=' + subjects.join(', ') + '>' +
-                                        '<input type="hidden" id="Bcover_image" name="cover_image" value=' + cover_image + '>' ;
+                                        '<input type="hidden" id="Bcover_image" name="cover_image" value=' + (bookData.cover && bookData.cover.large ? bookData.cover.large : 'N/A') + '>' ;
 
 
 
@@ -153,7 +153,7 @@
 
               <li>
                 <% if (bookclub.nextBook) { %>
-                  <%= bookclub.nextBook.title %>
+                    <img class="bookPreview" src="<%= bookclub.nextBook.cover_image %>" alt=""> <%= bookclub.nextBook.title %> 
                 <% } else  { %>
                     We dont have anything lined up!
                     <!--edit club modal starts-->
@@ -248,7 +248,7 @@
                                           '<input type="hidden" id="Bedition" name="num_pages" value=' + num_pages + '>' +
                                           '<input type="hidden" id="Bnum_pages" name="isbn" value=' + isbn + '>' +
                                           '<input type="hidden" id="Bsubjects" name="subjects" value=' + subjects.join(', ') + '>' +
-                                          '<input type="hidden" id="Bcover_image" name="cover_image" value=' + cover_image + '>' ;
+                                          '<input type="hidden" id="Bcover_image" name="cover_image" value=' + (bookData.cover && bookData.cover.large ? bookData.cover.large : 'N/A') + '>' ;
   
   
   
