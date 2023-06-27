@@ -3,6 +3,7 @@
   <div  id="topRow" class="row p-0 m-0  d-flex align-items-center justify-content-center" style="min-height: 500px; width: 100vw;">
     <div  id="pageLeft" class="col-md-6 mt-4 d-flex flex-column  align-items-center text-center" >
     <h1><%= bookclub.name %></h1>
+    
     <img  class="profPic mb-3" src='<%= bookclub.clubPic %>'>
 
         <ul id="">
@@ -22,6 +23,7 @@
         </div >
         <div id="pageRight" class="col-md-6  d-flex flex-column  align-items-center text-center">
 <!--CURRENT book-->  
+
                         
                 <% if (bookclub.currentBook) { %>
                    <p>Our current book:</p> <img  class="bookPreview" src="<%= bookclub.currentBook.cover_image %>" alt=""> <h4><%=bookclub.currentBook.title %></h4>
@@ -32,7 +34,12 @@
                     
                        
                             <button type="button" id="addBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">add shopping link</button>
-                            <button type="button" id="finishBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#finishModal">Finish book</button>
+                            <form action="/bookclubPage/finishBook" method="POST">
+                                <input type="hidden" name="_method" value="PUT">
+                                <input type="hidden" name="clubId" value="<%= bookclub.id %>">
+                                <button type="submit" name="finishBook" class="btn btn-primary">Finish Book</button>
+                              </form>
+                            
                             
                             
 

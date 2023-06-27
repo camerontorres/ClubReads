@@ -65,6 +65,7 @@ module.exports = {
             .populate('mod', 'name')
             .populate('currentBook', 'title cover_image author url')
             .populate('nextBook', 'title cover_image author url')
+            .populate('finishedBooks', 'title cover_image url ')
             .exec();
             const user = await User.findById(req.user._id)
             console.log(bookclub)
@@ -254,6 +255,31 @@ module.exports = {
               
                 
 
+                res.redirect("/bookclubPage/" + clubId);
+                }catch (err) {
+          next(err);
+        }
+      },
+
+      finishBook: async (req, res, next) => {
+        try {
+          
+            const clubId = req.body.clubId;
+    console.log("clubId:", clubId); // Log the value for debugging
+     // Check if clubId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(clubId)) {
+        throw new Error('Invalid clubId');
+      }
+  
+      const bookclub = await Club.findById(clubId);
+
+    
+    bookclub.finishedBooks.push(bookclub.currentBook.toObject());
+    
+    bookclub.currentBook = bookclub.nextBook;
+    bookclub.nextBook = null;
+    await bookclub.save();
+          
                 res.redirect("/bookclubPage/" + clubId);
                 }catch (err) {
           next(err);
