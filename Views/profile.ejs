@@ -17,7 +17,7 @@
                          <li><%= user.currentBooks[i].title  %> </a></li>
                          <% } %>
                         </ul></p>
-                <p><% if (!user.bookClubs) { %>
+             <p><% if (!user.bookClubs) { %> <!--clubs-->
                     <div>
                         <a href="/bookclubs" class="btn btn-danger"> join a club, nerd</a>
                     </div>
@@ -33,6 +33,23 @@
                 </p>
                 
                 <p>user since: <%= user.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
+
+
+
+                 <p><% if (!user.finishedBooks) { %> <!--finsihed books-->
+                    <div>
+                        <a href="/bookclubs" class="btn btn-danger"> I havent finished reading anything yet!</a>
+                    </div>
+                 
+                <% }else { %> finished books: 
+                    <ul>
+                    <% for( let i = 0; i < user.finishedBooks.length; i++ ) { %>
+                
+                     <li class="clubList"><%= user.finishedBooks[i].title  %></li>
+                     <% } %>
+                     <% } %>
+                    </ul>
+                </p>
 
                 <% if (user){ %>
 

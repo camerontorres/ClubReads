@@ -26,7 +26,7 @@ router.post("/bookclubPage/:_id/leave", ensureAuth, homeController.leaveClub);
 
 router.post("/bookclubPage/:_id/addBook", ensureAuth, homeController.addBook);
 router.post("/bookclubPage/:_id/addNextBook", ensureAuth, homeController.addNextBook);
-router.post("/bookclubPage/finishBook", ensureAuth, homeController.finishBook);
+router.post("/bookclubPage/:_id/finishBook", ensureAuth, homeController.finishBook);
 
 
 

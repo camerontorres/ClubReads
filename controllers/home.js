@@ -21,6 +21,7 @@ module.exports = {
           const user = await User.findById(req.user._id)
             .populate('bookClubs', 'name')
             .populate('currentBooks', 'title')
+            .populate('finishedBooks', 'title')
             .exec();
       
           res.render("profile.ejs", { user: user });
@@ -67,7 +68,7 @@ module.exports = {
             .populate('nextBook', 'title cover_image author url')
             .populate('finishedBooks', 'title cover_image url ')
             .exec();
-            const user = await User.findById(req.user._id)
+            const user = await User.findById(req.user.id)
             console.log(bookclub)
             
     
@@ -119,13 +120,15 @@ module.exports = {
           club.members.pull(userId);
           await club.save();
       
-          // Remove the club from the user's bookClubs array
-          user.bookClubs.pull(clubId);
-          await user.save();
+          // Remove the book from the user's bookClubs array
           if (club.currentBook) {
             user.currentBooks.pull(club.currentBook);
           }
           await user.save();
+
+          user.bookClubs.pull(clubId);
+          await user.save();
+         
       
           res.redirect("/bookclubPage/" + clubId);
         } catch (err) {
@@ -172,12 +175,12 @@ module.exports = {
             const bookData = req.body;
             
 
-          const userId = req.user._id; // Assuming you're using passport for authentication
+          
           const clubId = req.params._id;
       
           // Find the user and club by their IDs
-          const user = await User.findById(userId);
-          const club = await Club.findById(clubId);
+         
+          const club = await Club.findById(clubId).populate('members');
 
           
       
@@ -188,18 +191,24 @@ module.exports = {
           // Create a new book instance
           const newBook = new Book({
             title: [bookData.title],
-            author: [bookData.authors],
+            author: bookData.authors,
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
             cover_image: coverImage
           });
+
+          
       
             const savedBook = await newBook.save();
             club.currentBook = savedBook;
             await club.save();
-            user.currentBooks.push(savedBook);
-            await user.save()
+
+            club.members.forEach(async (member) => {
+           
+                member.currentBook = club.savedBook;
+                await member.save();
+              });
 
               
                 
@@ -264,21 +273,24 @@ module.exports = {
       finishBook: async (req, res, next) => {
         try {
           
-            const clubId = req.body.clubId;
-    console.log("clubId:", clubId); // Log the value for debugging
-     // Check if clubId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(clubId)) {
-        throw new Error('Invalid clubId');
-      }
-  
-      const bookclub = await Club.findById(clubId);
+            const clubId = req.params._id;
+            const club = await Club.findById(clubId).populate('members');
+            const finishedBook = club.currentBook._id;
+            
+            club.members.forEach(async (member) => {
+                member.finishedBooks.push(finishedBook);
+                member.currentBook = null
+                member.currentBook = club.nextBook;
+                await member.save();
+              });
+          
 
     
-    bookclub.finishedBooks.push(bookclub.currentBook.toObject());
+    club.finishedBooks.push(finishedBook);
     
-    bookclub.currentBook = bookclub.nextBook;
-    bookclub.nextBook = null;
-    await bookclub.save();
+    club.currentBook = club.nextBook;
+    club.nextBook = null;
+    await club.save();
           
                 res.redirect("/bookclubPage/" + clubId);
                 }catch (err) {

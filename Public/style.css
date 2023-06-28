@@ -103,6 +103,19 @@
         margin-left: auto;
         margin-right: auto;
   }
+  .thumbnailImg{
+    height: 150px;
+    width: 100px;
+    display: block;
+        margin-left: auto;
+        margin-right: auto;
+    
+  }
+  .footerContainerBG{
+    background-color: #3B4568;
+    color: var(--white);
+  }
+
   #pageLeft{
     min-height: 600px;
   }
@@ -110,6 +123,8 @@
   #pageRight{
     min-height: 600px;
   }
+
+  
   
 
   @media (min-width:600px){
