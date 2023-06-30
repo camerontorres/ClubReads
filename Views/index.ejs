@@ -1,61 +1,72 @@
 <%- include ('partials/header.ejs') %>
 <body>
-<div class="jumbotron text-light" style="background-image: url(/Public/images/reading.jpg);">
+<div class="jumbotron text-light" style="background-image: url(/Public/images/mainPic.jpg);">
     <div class="overlay"></div>
     
     <div class="content-container">
     
         <% if (!user) { %>
-            <h3>Book Clubs Made Easy. Experience the Joy of Reading with ClubReads</h3>
+            <h3 class="pl-2">Book Clubs Made Easy.<br> Experience the Joy of Reading with ClubReads</h3>
 
-            <div class="row d-flex flex-row justify-content-center">
+            <div class="row d-flex flex-row justify-content-center ">
             <div class="row  ">
         
-                <div class="">
-                    <a href="/login" class="btn btn-primary"> login</a>
+                <div class="m-5">
+                    <a href="/login" class="btnMain btn-primary"> login</a>
                 </div>
-                <div>
-                    <a href="/signUp" class="btn btn-primary"> sign up</a>
+                <div class="m-5">
+                    <a href="/signUp" class="btnMain btn-primary"> sign up</a>
                 </div>
             </div>
             
         
          
           <% } else{%>
-            <h3>Good reading!</h3>
+            <h3 class="text-center">Happy reading!</h3>
+            
 
             <div class="row d-flex flex-row justify-content-center">
            
 
                
-            <div class="d-flex flex-row justify-content-center">
-                <div>
-                    <a href="#" class="btn btn-primary"> view my club</a>
-                </div>
-                <div>
-                    <a href="#" class="btn btn-primary"> view my book</a>
-                </div>
-                <div>
-                    <a href="/bookclubs" class="btn btn-primary"> view clubs</a>
-                </div>
+            <div class="d-flex flex-row justify-content-between my-auto text-nowrap" style="width: 100%;">
+                        <div class=" col-3 my-5">
+                            <a href="#" class="btnMain btn-primary nowrap text-nowrap"> view my club</a>
+                        </div>
+                        <div class=" col-3  my-5">
+                            <a href="#" class="btnMain btn-primary text-nowrap"> view my book</a>
+                        </div>
+                        <div class=" col-3  my-5">
+                            <a href="/bookclubs" class="btnMain btn-primary text-nowrap"> view clubs</a>
+                        </div>
 
-        
-            </div>
-        
-            <div>
-                <div>
-                    <a href="/logout" class="btn btn-danger"> logout</a>
+                
+                   
+                
+                    <div>
+                        <div class="col-3  my-5">
+                            <a href="/logout" class="btnMain2 btn-danger text-nowrap"> logout</a>
+                        </div>
+                        
+                    </div>
                 </div>
                 
-            </div>
         </div>
             
             
             <% } %>
         </div>
+
+
+        </div>
+
+       
+        
     
 
     </div>
+   
+        
 </div>
 
 

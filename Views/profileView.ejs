@@ -1,5 +1,5 @@
 <%- include('partials/header') -%>
-<div class="container-fluid bg-white headerGap" style="padding: 0;">
+<div class="container-fluid bg-white headerGap" style="padding: 0; margin-bottom: 5em;">
   <div class="row p-0 m-0" style="min-height: 500px; width: 100vw;">
       <div class="col-6 p-0 d-flex justify-content-center align-items-center">
           <div class="text-center">
@@ -41,6 +41,8 @@
                      <% } %>
                     </ul>
                 </p>
+
+              
                 
                 
 
@@ -55,12 +57,46 @@
           </div>
 
             </div>
+            </div>
+            </div>
+            
+            
             
                   
           <!------------->
-      </div>
       
-  </div>
-</div>
+      <div class="row p-0 m-0" style="width: 100vw;">
+        <div class="col-12 p-0 m-0">
+
+            <% if (!user.finishedBooks) { %> <!--finsihed books-->
+                <div>
+                    <p> No finished books yet!</p>
+                </div>
+                <div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
+             
+            <% }else { %> <p class="text-center">finished books:</p>
+                <ul class="bookList">
+                <% for( let i = 0; i < user.finishedBooks.length; i++ ) { %>
+                    <div class="d-flex flex-column mx-3 my-2 thumbnailImgDiv">
+                        <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />
+                        <p class="text-center" style="font-size: 0.8em;"><%= user.finishedBooks[i].title %></p>
+                      </div>
+                      <% if ((i + 1) % 3 === 0) { %>
+                        </div><div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
+                      <% } %>
+                      <%}%>
+                    <%}%>
+                    </div>
+                    </div>
+
+        </div>
+        </div>
+
+    </div>
+      
+      
+      
+  
+
 
 <%- include ('partials/footer.ejs') %>

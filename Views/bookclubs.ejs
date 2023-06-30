@@ -1,58 +1,78 @@
 <%- include('partials/header.ejs') %>
 
 
-howdy!
-
-<p>book club list here:</p>
-<ul>
-    <% for( let i = 0; i < bookClubs.length; i++ ) { %>
-        <li><a href="/bookclubPage/<%= bookClubs[i]._id %>"> <%= bookClubs[i].name %> </a> </li>
-    
-    <% } %>
-</ul>
-
-
-
-<div>
-    <button type="button" class="createClub btn btn-danger " data-bs-toggle="modal" data-bs-target="#clubModal">
-        Create new club
-    </button>
-</div>
-    <!--MODAL-->
-<div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title" id="clubModalLabel">Create a new book club</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-
-
-    <div class="modal-body">
-        <form action="/bookclubs" method="POST" >
-        <label for="imgUpload" class="form-label">Book Club Photo</label>
-        <input type="file" class="form-control" id="imageUpload" name="clubPic">
-
+<section id="banner" class="d-flex justify-content-center align-content-center" style="background-image: url('/public/images/login.jpg'); height: 13em;position: relative;">
+    <div class="overlay" style="height: 13em;"></div>
         
-            <label for="nameChange" class="form-label">Club Name</label>
-            <input type="text" class="form-control" id="nameChange" name="clubName">
+        <div class="content-container mx-auto my-auto" style="position: relative; z-index: 3;">
+            <h1 class="text-center mx-auto my-auto" style="color: #FBFBFB;;">Find the right bookclub for you!</h1>
+        </div>
+                        
+    </section>
+    <div>
+            <h2 class="text-center">Available clubs:</h2>
+            <div class="container">
+            <ul style="width: 80vw;">
+                <% for( let i = 0; i < bookClubs.length; i++ ) { %>
+                    <li class="<%= i % 2 === 0 ? 'even-background' : '' %> " style="height: 3em; display: flex; align-items: center;;">
+                    <a href="/bookclubPage/<%= bookClubs[i]._id %>" style="max-height: 3em; display: flex; align-items: center;">
+                        <img class="clubPicMini" src="<%= bookClubs[i].picture %>">
+                        <p class="pl-2 my-auto" style=" font-size: 1.5em;"><%= bookClubs[i].name %></p>
+                    </a>
+                    
+                     <p  class="pl-5 my-auto" style=" float: end;">Members:<%= bookClubs[i].members.length %></p> 
+                    </li>
+                
+                <% } %>
+            </ul>
+        </div>
 
-            <label for="nameChange" class="form-label">Bio</label>
-            <input type="text" class="form-control" id="nameChange" name="bio">
 
 
-            
-    </div>
+            <div class="text-center">
+                <button type="button" class="createClub btn btn-danger " data-bs-toggle="modal" data-bs-target="#clubModal">
+                    Create new club
+                </button>
+            </div>
+                <!--MODAL-->
+            <div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clubModalLabel">Create a new book club</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
-        <button type="submit" class="btn btn-primary" value="save changes">Save changes</button> 
-    </div>
-    </form>
-    </div>
+                <div class="modal-body">
+                    <form action="/bookclubs" method="POST" >
+                    <label for="imgUpload" class="form-label">Book Club Photo</label>
+                    <input type="file" class="form-control" id="imageUpload" name="clubPic">
+
+                    
+                        <label for="nameChange" class="form-label">Club Name</label>
+                        <input type="text" class="form-control" id="nameChange" name="clubName">
+
+                        <label for="nameChange" class="form-label">Bio</label>
+                        <input type="text" class="form-control" id="nameChange" name="bio">
+
+
+                        
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                    <button type="submit" class="btn btn-primary" value="save changes">Save changes</button> 
+                </div>
+                </form>
+                </div>
+            </div>
+            </div> 
+
+
+
 </div>
-</div> 
 
 
 

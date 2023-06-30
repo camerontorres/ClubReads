@@ -33,9 +33,12 @@ module.exports = {
       getBookclubs: async (req, res, next) => {
         try {
           const bookClubs = await Club.find();
+          
           const name = bookClubs.name
           const _id = bookClubs._id
-          res.render("bookclubs.ejs", { bookClubs, name: name, _id: _id, user: req.user });
+          const members = bookClubs.members
+          const picture = bookClubs.clubPic
+          res.render("bookclubs.ejs", { bookClubs, name: name, _id: _id, user: req.user, members: members, pic: picture});
         } catch (err) {
           return next(err);
         }
@@ -47,6 +50,7 @@ module.exports = {
             const user = await User.findById(req.params._id)
             .populate('bookClubs', 'name')
             .populate('currentBooks', 'title cover_image')
+            .populate('finishedBooks', 'title cover_image')
             .exec();
             
     
