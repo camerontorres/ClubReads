@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const cloudinary = require("../middleware/cloudinary");
 const User = require("../Models/user");
 const Club = require("../Models/bookclub");
 const Book = require("../Models/book");
@@ -32,12 +33,14 @@ module.exports = {
 
       getBookclubs: async (req, res, next) => {
         try {
-          const bookClubs = await Club.find();
+          const bookClubs = await Club.find().populate('currentBook');
+          
           
           const name = bookClubs.name
           const _id = bookClubs._id
           const members = bookClubs.members
           const picture = bookClubs.clubPic
+          
           res.render("bookclubs.ejs", { bookClubs, name: name, _id: _id, user: req.user, members: members, pic: picture});
         } catch (err) {
           return next(err);
@@ -307,6 +310,9 @@ module.exports = {
       updateBookClub: async (req, res, next) => {
         try {
           const bookclub = await Club.findById(req.params._id);
+          // Upload image to cloudinary
+            // const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
+
       
           const { profilePic, bio, name } = req.body;
       
@@ -314,6 +320,10 @@ module.exports = {
           const updateFields = {};
           if (profilePic) {
             updateFields.profilePic = profilePic;
+            //Below code was used to upload in previous app for cloudinary
+           // image: result.secure_url,
+
+           //perhaps updateFields.profilePic = result
           }
           if (bio) {
             updateFields.desc = bio;
@@ -340,6 +350,24 @@ module.exports = {
       }
     };
 
+
+
+    /***    USE FOR FUTURE REFERENCE
+      deletePost: async (req, res) => {
+        try {
+          // Find post by id
+          let post = await Post.findById({ _id: req.params.id });
+          // Delete image from cloudinary
+          await cloudinary.uploader.destroy(post.cloudinaryId);
+          // Delete post from db
+          await Post.remove({ _id: req.params.id });
+          console.log("Deleted Post");
+          res.redirect("/profile");
+        } catch (err) {
+          res.redirect("/profile");
+        }
+      },
+      ***/
     
  
 

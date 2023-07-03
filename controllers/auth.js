@@ -1,4 +1,5 @@
 const passport = require("passport");
+const cloudinary = require("../middleware/cloudinary");
 const validator = require("validator");
 const User = require("../Models/user");
 

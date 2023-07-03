@@ -3,6 +3,7 @@ const passport = require("passport");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary");
 
 
 
@@ -15,7 +16,7 @@ const flash = require("express-flash");
 
 const path = require('path');
 
-const connectDB = require("./config/database");
+const connectDB = require('./config/database');
 
 const mainRoutes = require("./Routes/main");
 
@@ -31,6 +32,14 @@ require("dotenv").config({ path: "./config/.env" });
 
 // Passport config
 
+cloudinary.config(process.env.CLOUDINARY_URL);
+
+export async function handleUpload(file) {
+    const res = await cloudinary.uploader.upload(file, {
+      resource_type: "auto",
+    });
+    return res;
+  }
 
 //Connect To Database
 connectDB();

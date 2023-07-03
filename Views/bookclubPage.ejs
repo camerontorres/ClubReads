@@ -22,9 +22,54 @@
             <li><%= bookclub.mod ? bookclub.mod.name + ' is a mod' : 'No mod assigned' %></li>
             <li> <% if (bookclub.created_at) { %>
                 <% const createdAt = new Date(bookclub.created_at); %>
-                we've been a club since <%= createdAt.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %>
+                We've been a club since <%= createdAt.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %>
             <% } %>
         </li>
+        <% if (user.bookClubs.includes(bookclub._id)) { %>
+
+            <div>
+                <button type="button" class="clubUpdateBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#clubModal">
+                    Edit info
+                </button>
+            </div>
+            <% } %>
+            <!--edit club modal starts-->
+    
+            <div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="clubModalLabel">Edit info</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+    
+    
+                    <div class="modal-body">
+                        <form action="/bookclubPage/<%= bookclub._id %>" method="POST" >
+                            <input type="hidden" name="_method" value="PUT">
+                       <label for="imgUpload" class="form-label">Profile Picture</label>
+                        <input type="file" class="form-control" id="clubPicUpload" name="profilePic">      <!---   enctype="multipart/form-data"-->
+    
+                        
+                            <label for="nameChange" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="clubNameChange" name="name">
+    
+                            <label for="bioChange" class="form-label">Bio</label>
+                            <input type="text" class="form-control" id="clubBioChange" name="bio">
+                    </div>
+    
+    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                        <button type="submit" class="btn btn-primary" value="Save changes">Save changes</button> 
+                    </div>
+                    </form>
+                    </div>
+                </div>
+                </div> 
+                
+                <!--modal ends-->
+
         </div >
         <div id="pageRight" class="col-md-6  d-flex flex-column  align-items-center text-center">
 <!--CURRENT book-->  
@@ -38,12 +83,12 @@
                     <% } %>
                     
                        
-                            <button type="button" id="addBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">add shopping link</button>
+                            <button type="button" id="addBook" class="addBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">Add shopping link</button>
 
                             <form action="/bookclubPage/<%= bookclub._id %>/finishBook" method="POST">
                                 <input type="hidden" name="_method" value="PUT">
                                 
-                                <button type="submit" name="finishBook" class="btn btn-primary">Finish Book</button>
+                                <button type="submit" name="finishBook" class="btnMain2 btn-primary">Finish Book</button>
                               </form>
                             
                             
@@ -84,8 +129,8 @@
                         <p class="text-center" >We're not reading anything! </p>
                         <!--add book button starts-->
                         <div class="text-center">
-                            <button type="button" id="addBook" class="addBookBtn mx-auto     btn btn-primary " data-bs-toggle="modal" data-bs-target="#addBookModal">
-                                add book!
+                            <button type="button" id="addBook" class="addBookBtn mx-auto btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addBookModal">
+                                Add book!
                             </button>
                         </div>
                 </div>
@@ -246,7 +291,7 @@
             <% } %>
             
                 
-                    <button type="button" id="addBook" class="addBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">edit book info</button>
+                    <button type="button" id="addBook" class="addBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">Edit book info</button>
                 
                 
 
@@ -285,8 +330,8 @@
         <!--edit club modal starts-->
         <% if (user.bookClubs.includes(bookclub._id)) { %>
         <div>
-          <button type="button" id="addNextBook" class="addNextBookBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#addNextBookModal">
-              add next book!
+          <button type="button" id="addNextBook" class="addNextBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addNextBookModal">
+              Add next book!
           </button>
       </div>
       <% } %>
@@ -421,65 +466,31 @@
         </ul>
 
     
-       <div id="bookClubButtonsGroup">
+       <div  class=" container-fluid m-0  p-0 row align-items-center justify-items-center"  style="margin-bottom: 10em;" id="bookClubButtonsGroup">
 
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
         <!--  BUTTONS-->
         <% if (!user.bookClubs.includes(bookclub._id)) { %>
         <form action="/bookclubPage/<%= bookclub._id %>/join" method="POST">
-            <button type="submit" class="btn btn-primary">Join Club</button>
+            <button type="submit" class="btnMain3 btn-primary">Join Club</button>
           </form>
           <% } %>
-
-          <% if (user.bookClubs.includes(bookclub._id)) { %>
-
-        <div>
-            <button type="button" class="clubUpdateBtn btn btn-primary " data-bs-toggle="modal" data-bs-target="#clubModal">
-                edit info
-            </button>
+        
+            <a class="btnMain3 btn-primary"  href="/bookclubs">Back to club list</a>
+        
+        
+        
+        
         </div>
-        <% } %>
-        <!--edit club modal starts-->
 
-        <div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="clubModalLabel">Edit info</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-
-                <div class="modal-body">
-                    <form action="/bookclubPage/<%= bookclub._id %>" method="POST" >
-                        <input type="hidden" name="_method" value="PUT">
-                   <label for="imgUpload" class="form-label">Profile Picture</label>
-                    <input type="file" class="form-control" id="clubPicUpload" name="profilePic">      <!---   enctype="multipart/form-data"-->
-
-                    
-                        <label for="nameChange" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="clubNameChange" name="name">
-
-                        <label for="bioChange" class="form-label">Bio</label>
-                        <input type="text" class="form-control" id="clubBioChange" name="bio">
-                </div>
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
-                    <button type="submit" class="btn btn-primary" value="Save changes">Save changes</button> 
-                </div>
-                </form>
-                </div>
-            </div>
-            </div> 
-            
-            <!--modal ends-->
-
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
             <% if (user.bookClubs.includes(bookclub._id)) { %>
             <form action="/bookclubPage/<%= bookclub._id %>/leave" method="POST">
-                <button type="submit" class="btn btn-danger">Leave Club</button>
+                <button type="submit" class="btnMain2 btn-danger">Leave Club</button>
               </form>
               <% } %>
+            </div>
+
        </div>
        <!--  BUTTON END-->
 
@@ -487,10 +498,6 @@
         
 
       
-  </div>
-  <a class="btn btn-primary" href="/bookclubs">back to clubs</a>
-  
-  </div>
   
   
 

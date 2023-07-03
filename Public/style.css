@@ -50,15 +50,17 @@
 }
 
 .clubPicMini{
-    height: 2.8em;
-    width: 2.8em;
+    min-height: 2.8em;
+  min-width: 2.8em;
+  
     border: .5px solid #3B4568;
     border-radius: 50%;
+    object-fit: cover;
 
 }
 
 .btnMain:hover {
-    background-color: black;
+    background-color: #3B4568;
     color: white;
 }
 .btnMain2:hover {
@@ -73,6 +75,10 @@
 }
 #banner{
     background-size: contain;
+}
+
+#bookClubButtonsGroup{
+    height: 5em;
 }
   
   
@@ -202,8 +208,20 @@
     min-height: 600px;
   }
 
+  .clubListLi{
+    height: 3em; 
+  }
+
+  .clubListLi > a{
+    max-height: 3em;
+  }
   
-  
+  .clubListName{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+  }
 
   @media (min-width:600px){
     .profPic{
@@ -244,7 +262,14 @@
       width: 33.33%;
       padding: 0 10px;
     }
-    
+    .clubListLi{
+        height: 6em;
+    }
+    .clubListLi > a{
+        max-height: 6em;
+      }
+      
+      
     
     .footerContainer .row {
         justify-content: center;
@@ -252,10 +277,16 @@
         padding-left: 0;
         
       }
-      
-   
-     
-  }
+      .clubMemberList{
+        display: none;
+      }
+      #listName {
+        width: 50%;
+        flex-basis: 50%;
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+      }
 
   @media (max-width: 862px) {
     .pageTitle{
@@ -269,6 +300,9 @@
     color: #FBFBFB;
   }
 
+  .no-current-book{
+    color: #E17571;
+  }
   
  
 
@@ -279,5 +313,7 @@
 .user-member .addBookBtn {
     display: block; /* Show the button if the user is a member */
 }
+
+
 
  

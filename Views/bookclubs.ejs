@@ -10,17 +10,25 @@
                         
     </section>
     <div>
-            <h2 class="text-center">Available clubs:</h2>
+            <h2 class="text-center my-5">Available clubs:</h2>
             <div class="container">
             <ul style="width: 80vw;">
                 <% for( let i = 0; i < bookClubs.length; i++ ) { %>
-                    <li class="<%= i % 2 === 0 ? 'even-background' : '' %> " style="height: 3em; display: flex; align-items: center;;">
-                    <a href="/bookclubPage/<%= bookClubs[i]._id %>" style="max-height: 3em; display: flex; align-items: center;">
-                        <img class="clubPicMini" src="<%= bookClubs[i].picture %>">
-                        <p class="pl-2 my-auto" style=" font-size: 1.5em;"><%= bookClubs[i].name %></p>
+                    <li class="<%= i % 2 === 0 ? 'even-background' : '' %> clubListLi " style="display: flex; align-items: center;;">
+                    <a class="col-6" href="/bookclubPage/<%= bookClubs[i]._id %>" style=" display: flex; align-items: center;">
+                        <img class="clubPicMini" src="<%= bookClubs[i].picture %>" style="object-fit: cover;">
+                        <p class="pl-2 my-auto clubListName" style=" font-size: 1.5em;"><%= bookClubs[i].name %></p>
                     </a>
                     
-                     <p  class="pl-5 my-auto" style=" float: end;">Members:<%= bookClubs[i].members.length %></p> 
+                     <p  class=" col-3  pl-5 my-auto clubMemberList" style=" float: end;">Members: <%= bookClubs[i].members.length %></p> 
+                     <p id="listName" class=" pl-2 pr-3 my-auto clubListName"> 
+                        <% if (bookClubs[i].currentBook) { %>
+                            <%= bookClubs[i].currentBook.title %>
+                          <% } else { %>
+                            <span class="no-current-book">No Current Book</span>
+                          <% } %>
+                    </p>
+                        
                     </li>
                 
                 <% } %>
@@ -29,7 +37,7 @@
 
 
 
-            <div class="text-center">
+            <div class="text-center my-5">
                 <button type="button" class="createClub btn btn-danger " data-bs-toggle="modal" data-bs-target="#clubModal">
                     Create new club
                 </button>

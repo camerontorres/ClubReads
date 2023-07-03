@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../middleware/multer");
 const authController = require("../controllers/auth");
 const homeController = require("../controllers/home");
 
@@ -18,7 +19,9 @@ router.post("/login", authController.postLogin);
 router.get("/logout", authController.logout);
 
 router.post("/user/profile/:_id", authController.updateUserProfile);
+//upload.single("file")
 router.post("/bookclubPage/:_id", homeController.updateBookClub);
+//upload.single("file")
 router.post("/bookclubs", homeController.postNewClub);
 
 router.post("/bookclubPage/:_id/join", ensureAuth, homeController.joinClub);
