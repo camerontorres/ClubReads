@@ -45,17 +45,17 @@
     
     
                     <div class="modal-body">
-                        <form action="/bookclubPage/<%= bookclub._id %>" method="POST" >
+                        <form action="/bookclubPage/<%= bookclub._id %>" method="POST" enctype="multipart/form-data" >
                             <input type="hidden" name="_method" value="PUT">
-                       <label for="imgUpload" class="form-label">Profile Picture</label>
-                        <input type="file" class="form-control" id="clubPicUpload" name="profilePic">      <!---   enctype="multipart/form-data"-->
+                       <label for="clubPicUpload" class="form-label">Club Picture</label>
+                        <input type="file" class="form-control" id="clubPicUpload" name="clubPic">      <!---   enctype="multipart/form-data"-->
     
                         
                             <label for="nameChange" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="clubNameChange" name="name">
+                            <input type="text" class="form-control" id="clubNameChange" name="name" placeholder="<%= bookclub.name %>">
     
                             <label for="bioChange" class="form-label">Bio</label>
-                            <input type="text" class="form-control" id="clubBioChange" name="bio">
+                            <input type="text" class="form-control" id="clubBioChange" name="bio" placeholder="<%= bookclub.desc %>">
                     </div>
     
     

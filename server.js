@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
+const logger = require("morgan");
 
 
 
@@ -32,14 +33,9 @@ require("dotenv").config({ path: "./config/.env" });
 
 // Passport config
 
-cloudinary.config(process.env.CLOUDINARY_URL);
 
-export async function handleUpload(file) {
-    const res = await cloudinary.uploader.upload(file, {
-      resource_type: "auto",
-    });
-    return res;
-  }
+
+
 
 //Connect To Database
 connectDB();
@@ -61,7 +57,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-
+//Logging
+app.use(logger("dev"));
 
 
 // Setup Sessions - stored in MongoDB

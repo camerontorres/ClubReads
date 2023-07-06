@@ -66,6 +66,9 @@ exports.postLogin = async (req, res, next) => {
       const userId = req.params._id; // Assuming you have authenticated the user and have access to the user object
   
       const {profilePic, bio , name } = req.body;
+
+      //const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
+      //image: result.secure_url,
      
 
      

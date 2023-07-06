@@ -20,7 +20,7 @@ router.get("/logout", authController.logout);
 
 router.post("/user/profile/:_id", authController.updateUserProfile);
 //upload.single("file")
-router.post("/bookclubPage/:_id", homeController.updateBookClub);
+router.post("/bookclubPage/:_id", upload.single("clubPic"), homeController.updateBookClub);
 //upload.single("file")
 router.post("/bookclubs", homeController.postNewClub);
 

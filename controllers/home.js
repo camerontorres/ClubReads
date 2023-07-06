@@ -1,5 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const cloudinary = require("../middleware/cloudinary");
+const multer = require('../middleware/multer');
 const User = require("../Models/user");
 const Club = require("../Models/bookclub");
 const Book = require("../Models/book");
@@ -310,31 +311,55 @@ module.exports = {
       updateBookClub: async (req, res, next) => {
         try {
           const bookclub = await Club.findById(req.params._id);
-          // Upload image to cloudinary
-            // const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
-
+          console.log("Book club:", bookclub);
+         
+             
       
-          const { profilePic, bio, name } = req.body;
+          const { bio, name } = req.body;
+          console.log("Bio:", bio);
+          console.log("Name:", name);
+          
       
           // Prepare the fields to be updated
           const updateFields = {};
-          if (profilePic) {
-            updateFields.profilePic = profilePic;
-            //Below code was used to upload in previous app for cloudinary
-           // image: result.secure_url,
+          console.log("preFile:",req.file)
+          console.log("File Path:",req.file.path)
+          
+            
+            if (req.file) {
+                console.log("File:", req.file);
+                // Upload image to cloudinary
+                const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
+                
+                console.log("Cloudinary result:", result);
+                const image = result.secure_url;
+                console.log("Cloudinary image:", image);
+                updateFields.clubPic = image;
+                
+                
+                
+                
+                if (result.error) {
+                    console.error("Cloudinary upload error:", result.error);
+                    throw new Error(result.error.message);
+                  }
+                
+              }
 
            //perhaps updateFields.profilePic = result
-          }
+          
           if (bio) {
             updateFields.desc = bio;
           }
           if (name) {
             updateFields.name = name;
           }
+          console.log("Update fields:", updateFields);
       
           // Update the book club's profile in the database
-          const updatedClub = await Club.findByIdAndUpdate(bookclub, { $set: updateFields }, { new: true });
-          const id = updatedClub._id
+          const updatedClub = await Club.findByIdAndUpdate(req.params._id, { $set: updateFields }, { new: true });
+          console.log("Updated club:", updatedClub);
+          
       
           if (!updatedClub) {
             // Handle the case where the book club is not found
@@ -342,7 +367,7 @@ module.exports = {
           }
       
           // Redirect to the book club page
-          res.redirect('/bookclubPage/' + id);
+          res.redirect('/bookclubPage/' + updatedClub._id);
         } catch (err) {
           // Handle any errors that occur during the update process
           return next(err);
