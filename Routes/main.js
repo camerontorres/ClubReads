@@ -18,7 +18,7 @@ router.get("/login", authController.getLogin);
 router.post("/login", authController.postLogin);
 router.get("/logout", authController.logout);
 
-router.post("/user/profile/:_id", authController.updateUserProfile);
+router.post("/user/profile/:_id",upload.single("profilePic"), authController.updateUserProfile);
 //upload.single("file")
 router.post("/bookclubPage/:_id", upload.single("clubPic"), homeController.updateBookClub);
 //upload.single("file")

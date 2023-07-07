@@ -65,7 +65,7 @@ exports.postLogin = async (req, res, next) => {
     try {
       const userId = req.params._id; // Assuming you have authenticated the user and have access to the user object
   
-      const {profilePic, bio , name } = req.body;
+      const { bio , name } = req.body;
 
       //const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
       //image: result.secure_url,
@@ -77,8 +77,17 @@ exports.postLogin = async (req, res, next) => {
   
       // Prepare the fields to be updated
       const updateFields = {};
-      if (profilePic) {
-        updateFields.profilePic = profilePic;
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
+        console.log('image:', result)
+        const image = result.secure_url;
+        updateFields.profilePic = image;
+        if (result.error) {
+          console.error("Cloudinary upload error:", result.error);
+          throw new Error(result.error.message);
+        }
+
+
       }
       if (bio) {
         updateFields.bio = bio;
@@ -89,7 +98,7 @@ exports.postLogin = async (req, res, next) => {
   
       // Update the user's profile in the database
       const updatedUser = await User.findByIdAndUpdate(userId, { $set: updateFields } ,{ new: true })
-  
+      console.log('user:', updatedUser)
       if (!updatedUser) {
         // Handle the case where the user is not found
         return res.status(404).json({ error: "User not found" });

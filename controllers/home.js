@@ -40,9 +40,9 @@ module.exports = {
           const name = bookClubs.name
           const _id = bookClubs._id
           const members = bookClubs.members
-          const picture = bookClubs.clubPic
           
-          res.render("bookclubs.ejs", { bookClubs, name: name, _id: _id, user: req.user, members: members, pic: picture});
+          
+          res.render("bookclubs.ejs", { bookClubs, name: name, _id: _id, user: req.user, members: members});
         } catch (err) {
           return next(err);
         }
@@ -311,25 +311,24 @@ module.exports = {
       updateBookClub: async (req, res, next) => {
         try {
           const bookclub = await Club.findById(req.params._id);
-          console.log("Book club:", bookclub);
+          
          
              
       
           const { bio, name } = req.body;
-          console.log("Bio:", bio);
-          console.log("Name:", name);
+         
           
       
           // Prepare the fields to be updated
           const updateFields = {};
-          console.log("preFile:",req.file)
-          console.log("File Path:",req.file.path)
+          
           
             
             if (req.file) {
                 console.log("File:", req.file);
                 // Upload image to cloudinary
                 const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
+               
                 
                 console.log("Cloudinary result:", result);
                 const image = result.secure_url;
