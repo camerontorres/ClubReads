@@ -11,8 +11,8 @@ router.get("/", homeController.getIndex);
 router.get("/signUp", homeController.getSignUp);
 router.get("/profile", ensureAuth, homeController.getProfile)
 router.get("/bookclubs", homeController.getBookclubs)
-router.get("/bookclubPage/:_id", homeController.getBookclubPage)
-router.get("/profileView/:_id", homeController.getViewProfile)
+router.get("/bookclubPage/:_id",ensureAuth, homeController.getBookclubPage)
+router.get("/profileView/:_id",ensureAuth, homeController.getViewProfile)
 
 router.get("/login", authController.getLogin);
 router.post("/login", authController.postLogin);
@@ -28,6 +28,7 @@ router.post("/bookclubPage/:_id/join", ensureAuth, homeController.joinClub);
 router.post("/bookclubPage/:_id/leave", ensureAuth, homeController.leaveClub);
 
 router.post("/bookclubPage/:_id/addBook", ensureAuth, homeController.addBook);
+router.post("/bookclubPage/:_id/addCurrentLink", ensureAuth, homeController.addCurrentLink);
 router.post("/bookclubPage/:_id/addNextBook", ensureAuth, homeController.addNextBook);
 router.post("/bookclubPage/:_id/finishBook", ensureAuth, homeController.finishBook);
 

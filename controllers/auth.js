@@ -9,10 +9,14 @@ exports.getLogin = (req, res) => {
   }
   res.render("login", {
     title: "Login",
+     user: req.user 
+     
   });
 };
 
 exports.postLogin = async (req, res, next) => {
+      
+  
     const validationErrors = [];
     if (!validator.isEmail(req.body.email))
       validationErrors.push({ msg: "Please enter a valid email address." });
@@ -48,8 +52,12 @@ exports.postLogin = async (req, res, next) => {
             return next(err);
           }
           req.flash("success", { msg: "Success! You are logged in." });
+          req.session.loggedInUser = user;
           
-          res.redirect(req.session.returnTo || "/");
+            res.redirect(req.session.returnTo || "/");
+
+          
+          
         });
       } else {
         req.flash("errors", { msg: "Invalid email or password." });

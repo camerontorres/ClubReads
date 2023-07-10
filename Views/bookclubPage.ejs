@@ -12,10 +12,11 @@
                 <%= bookclub.members ? 'Members: ' : 'No members yet!' %>
                 <% if (bookclub.members && bookclub.members.length > 0) { %>
                   <% for (let i = 0; i < bookclub.members.length; i++) { %>
-                    <a href="/profileView/<%= bookclub.members[i]._id %>"><%= bookclub.members[i].name %></a>
+                    <a href="<%= bookclub.members[i]._id === user._id ? '/profile' : '/profileView/' + bookclub.members[i]._id %>"><%= bookclub.members[i].name %></a>
                     <% if (i < bookclub.members.length - 1) { %>
                       ,
                     <% } %>
+                   
                   <% } %>
                 <% } %>
               </li>
@@ -79,11 +80,12 @@
                    <p>Our current book:</p> <img  class="bookPreview" src="<%= bookclub.currentBook.cover_image %>" alt=""> <h4><%=bookclub.currentBook.title %></h4>
                    <p>By <%= bookclub.currentBook.author.join(' ') %> </p>
                    <% if (bookclub.currentBook.url) { %>
-                    <a href="#"><p>Find it here</p></a>
-                    <% } %>
+                    <a href="<%=bookclub.currentBook.url%>"><p>Find it here</p></a>
+                    <% }else{%>
                     
                        
-                            <button type="button" id="addBook" class="addBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">Add shopping link</button>
+                            <button type="button" id="addUrl" class="addBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">Add shopping link</button>
+                            <% } %>
 
                             <form action="/bookclubPage/<%= bookclub._id %>/finishBook" method="POST">
                                 <input type="hidden" name="_method" value="PUT">
@@ -105,7 +107,7 @@
 
 
                                                 <div class="modal-body">
-                                                    <form action="/user/profile/<%= user._id %>" method="POST" >
+                                                    <form action="/bookclubPage/<%= bookclub._id %>/addCurrentLink" method="POST" >
                                                         <input type="hidden" name="_method" value="PUT">
                                  
                                                         <label for="nameChange" class="form-label">add link</label>
@@ -122,6 +124,7 @@
                                         </div>
                                     </div>
                                     </div>
+                                   
                             
                         
                 <% } else { %>

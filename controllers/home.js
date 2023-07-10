@@ -15,7 +15,7 @@ module.exports = {
       res.render("index.ejs", { user: req.user });
     },
     getSignUp: (req, res) => {
-      res.render("signUp.ejs");
+      res.render("signUp.ejs", { user: req.user });
     },
 
     getProfile: async (req, res, next) => {
@@ -70,17 +70,23 @@ module.exports = {
            
             const bookclub = await Club.findById(req.params._id)
             
-            .populate('members', 'name userName')
+
+            
+            .populate('members', 'name userName _id')
             .populate('mod', 'name')
             .populate('currentBook', 'title cover_image author url')
             .populate('nextBook', 'title cover_image author url')
             .populate('finishedBooks', 'title cover_image url ')
             .exec();
+            
             const user = await User.findById(req.user.id)
-            console.log(bookclub)
+            const _id = user.id
+            
+            
+            
             
     
-            res.render("bookclubPage.ejs", { bookclub: bookclub, user: user, });
+            res.render("bookclubPage.ejs", { bookclub: bookclub, user: user, _id: _id});
         } catch (err) {
           return next(err);
         }
@@ -117,7 +123,7 @@ module.exports = {
 
       leaveClub: async (req, res, next) => {
         try {
-          const userId = req.user._id; // Assuming you're using passport for authentication
+          const userId = req.user._id; 
           const clubId = req.params._id;
       
           // Find the user and club by their IDs
@@ -178,7 +184,7 @@ module.exports = {
 
       addBook: async (req, res, next) => {
         try {
-            console.log("addBook route reached");
+           
             
             const bookData = req.body;
             
@@ -227,10 +233,38 @@ module.exports = {
         }
       },
 
+      addCurrentLink: async(req, res, next) =>{
+        try{
+          const clubId = req.params._id;
+         
+          const club = await Club.findById(clubId).populate('currentBook', 'id')
+          const currentBook = club.currentBook._id
+          const { url } = req.body;
+          const updateFields = {};
+
+          if (url) {
+            updateFields.url = url;
+          }
+
+          const updatedBook= await Book.findByIdAndUpdate(currentBook, { $set: updateFields } ,{ new: true })
+          
+          if (!updatedBook) {
+            // Handle the case where the book club is not found
+            return res.status(404).json({ error: "Book club not found" });
+          }
+          res.redirect('/bookclubPage/'+ clubId)
+      
+
+        } catch (err) {
+          next(err);
+        }
+
+      },
+
 
       addNextBook: async (req, res, next) => {
         try {
-            console.log("addBook route reached");
+            
             
             const bookData = req.body;
             
@@ -247,11 +281,11 @@ module.exports = {
 
           const coverImage = bookData.cover_image
           
-          console.log("bookData.coverImage:",bookData.cover_image)
+          
 
       
           // Obtain the book data from the Open Library API
-          // Assuming you have access to the book data as `bookData`
+          
       
           // Create a new book instance
           const newBook = new Book({
@@ -325,14 +359,14 @@ module.exports = {
           
             
             if (req.file) {
-                console.log("File:", req.file);
+                
                 // Upload image to cloudinary
                 const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
                
                 
-                console.log("Cloudinary result:", result);
+                
                 const image = result.secure_url;
-                console.log("Cloudinary image:", image);
+                
                 updateFields.clubPic = image;
                 
                 
@@ -353,11 +387,11 @@ module.exports = {
           if (name) {
             updateFields.name = name;
           }
-          console.log("Update fields:", updateFields);
+          
       
           // Update the book club's profile in the database
           const updatedClub = await Club.findByIdAndUpdate(req.params._id, { $set: updateFields }, { new: true });
-          console.log("Updated club:", updatedClub);
+          
           
       
           if (!updatedClub) {
