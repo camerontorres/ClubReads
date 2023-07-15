@@ -81,9 +81,7 @@
                         <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />
                         <p class="text-center" style="font-size: 0.8em;"><%= user.finishedBooks[i].title %></p>
                       </div>
-                      <% if ((i + 1) % 3 === 0) { %>
-                        </div><div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
-                      <% } %>
+                    
                       <%}%>
                     <%}%>
                     </div>

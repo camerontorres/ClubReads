@@ -161,6 +161,7 @@ exports.postSignUp = async (req, res, next) => {
       const user = new User({
         userName: req.body.userName,
         email: req.body.email,
+        name: req.body.name,
         password: req.body.password,
         
       });

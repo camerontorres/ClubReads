@@ -4,10 +4,11 @@
     <div  id="pageLeft" class="col-md-6 mt-4 d-flex flex-column  align-items-center text-center" >
     <h1><%= bookclub.name %></h1>
     
-    <img  class="profPic mb-3" src='<%= bookclub.clubPic %>'>
+    <img class="profPic mb-3" src='<%= bookclub.clubPic %>'>
 
         <ul id="">
             <li><%= bookclub.desc %></li>
+            <li class="m-2"><a  class="btnMain3" href="<%= bookclub.discordURL %>"> Visit our Discord <span class="fa-brands fa-discord"></span></a></li>
             <li>
                 <%= bookclub.members ? 'Members: ' : 'No members yet!' %>
                 <% if (bookclub.members && bookclub.members.length > 0) { %>
@@ -41,7 +42,7 @@
                     <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="clubModalLabel">Edit info</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
     
     
@@ -57,6 +58,9 @@
     
                             <label for="bioChange" class="form-label">Bio</label>
                             <input type="text" class="form-control" id="clubBioChange" name="bio" placeholder="<%= bookclub.desc %>">
+
+                            <label for="urlChange" class="form-label"><span class=" mt-2 fa-brands fa-discord"></span>Discord link</label>
+                            <input type="text" class="form-control " id="clubUrlChange" name="Url" placeholder="<%= bookclub.discordURL%>">
                     </div>
     
     
@@ -78,20 +82,22 @@
                         
                 <% if (bookclub.currentBook) { %>
                    <p>Our current book:</p> <img  class="bookPreview" src="<%= bookclub.currentBook.cover_image %>" alt=""> <h4><%=bookclub.currentBook.title %></h4>
-                   <p>By <%= bookclub.currentBook.author.join(' ') %> </p>
+                   <p>By <%= bookclub.currentBook.author[0] %></p>
                    <% if (bookclub.currentBook.url) { %>
                     <a href="<%=bookclub.currentBook.url%>"><p>Find it here</p></a>
-                    <% }else{%>
+                    <% }else if (user.bookClubs.includes(bookclub._id)) { %>
+                      
                     
                        
                             <button type="button" id="addUrl" class="addBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">Add shopping link</button>
-                            <% } %>
+                            
 
                             <form action="/bookclubPage/<%= bookclub._id %>/finishBook" method="POST">
                                 <input type="hidden" name="_method" value="PUT">
                                 
                                 <button type="submit" name="finishBook" class="btnMain2 btn-primary">Finish Book</button>
                               </form>
+                              <% } %>
                             
                             
                             
@@ -102,7 +108,7 @@
                                         <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="currentURLModalLabel">Edit book info</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
 
 
@@ -125,17 +131,20 @@
                                     </div>
                                     </div>
                                    
+                                   
                             
                         
                 <% } else { %>
                     <div class="my-auto mx-auto text-center">
                         <p class="text-center" >We're not reading anything! </p>
                         <!--add book button starts-->
+                        <% if (user.bookClubs.includes(bookclub._id)) { %>
                         <div class="text-center">
                             <button type="button" id="addBook" class="addBookBtn mx-auto btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addBookModal">
                                 Add book!
                             </button>
                         </div>
+                        <% } %>
                 </div>
 
                 <!--add book modal starts-->
@@ -145,7 +154,7 @@
                         <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="addBookModalLabel">Edit info</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
         
         
@@ -167,7 +176,7 @@
                                 function searchBooks() {
                                   event.preventDefault();
                           
-                                  isbn = document.getElementById('search-input').value; // Assign the value to the isbn variable
+                                  isbn = document.getElementById('search-input').value.trim(); // Assign the value to the isbn variable
                           
                                   var url = 'https://openlibrary.org/api/books?bibkeys=ISBN:' + encodeURIComponent(isbn) + '&format=json&jscmd=data';
                                   fetch(url)
@@ -273,9 +282,7 @@
             <img class="thumbnailImg" src="<%= bookclub.finishedBooks[i].cover_image %>" />
             <p class="text-center" style="font-size: 0.8em;"><%= bookclub.finishedBooks[i].title %></p>
           </div>
-          <% if ((i + 1) % 3 === 0) { %>
-            </div><div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
-          <% } %>
+          
         <% } %>
       </div>
     <% } %>
@@ -289,31 +296,32 @@
         <p>Our next Book:</p>
         <img class="bookPreview" src="<%= bookclub.nextBook.cover_image %>" alt=""> <%= bookclub.nextBook.title %>
         <p>By <%= bookclub.nextBook.author %> </p>
+        
         <% if (bookclub.nextBook.url) { %>
-            <a href="#"><p>Find it here</p></a>
-            <% } %>
+            <a  class='' href="<%=bookclub.nextBook.url%>"><p>Find it here</p></a>
+            <% }else{ %>
             
                 
-                    <button type="button" id="addBook" class="addBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addCurrentURL">Edit book info</button>
+                    <button type="button" id="addBook" class=" mx-auto btnMain3 btn-primary" data-bs-toggle="modal" data-bs-target="#addNextURL">Edit book info</button>
                 
                 
 
 
-                    <div class="modal fade" id="addCurrentURL" tabindex="-1" role="dialog" aria-labelledby="currentURLModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="addNextURL" tabindex="-1" role="dialog" aria-labelledby="nextURLModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="currentURLModalLabel">Add a shopping link for the book!</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h5 class="modal-title" id="nextURLModalLabel">Add a shopping link for the book!</h5>
+                                <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
 
                                     <div class="modal-body">
-                                        <form action="/user/profile/<%= user._id %>" method="POST" >
+                                        <form action="/bookclubPage/<%= bookclub._id %>/addNextLink" method="POST" >
                                             <input type="hidden" name="_method" value="PUT">
                      
                                             <label for="nameChange" class="form-label">add link</label>
-                                            <input type="text" class="form-control" id="currentBookURL" name="url">
+                                            <input type="text" class="form-control" id="nextBookURL" name="url">
                                     </div>
 
 
@@ -326,6 +334,7 @@
                             </div>
                         </div>
                         </div>
+                        <% } %>
                     
                 
     <% } else  { %>
@@ -345,7 +354,7 @@
               <div class="modal-content">
               <div class="modal-header">
                   <h5 class="modal-title" id="addNextBookModalLabel">Edit info</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
 
 
@@ -367,7 +376,7 @@
                       function searchBooks() {
                         event.preventDefault();
                 
-                        isbn = document.getElementById('search-input').value; // Assign the value to the isbn variable
+                        isbn = document.getElementById('search-input').value.trim(); // Assign the value to the isbn variable
                 
                         var url = 'https://openlibrary.org/api/books?bibkeys=ISBN:' + encodeURIComponent(isbn) + '&format=json&jscmd=data';
                         fetch(url)

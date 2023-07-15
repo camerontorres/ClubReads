@@ -9,7 +9,10 @@
                  <img  class="profPic" src="<%= user.profilePic %>">
                 
                 <h1><%= user.name %></h1>
-                
+                <% if (user.currentBooks.length== 0) { %>
+                    <p>you're not reading anything yet!</p>
+                 
+                <% }else{ %>
                 <p>currently reading: <%=user.currentBooks.title %>
                     <ul>
                         <% for( let i = 0; i < user.currentBooks.length; i++ ) { %>
@@ -17,9 +20,10 @@
                          <li><%= user.currentBooks[i].title  %> </a></li>
                          <% } %>
                         </ul></p>
-             <p><% if (!user.bookClubs) { %> <!--clubs-->
+                        <% } %>
+             <p><% if (user.bookClubs == 0) { %> <!--clubs-->
                     <div>
-                        <a href="/bookclubs" class="btn btn-danger"> join a club, nerd</a>
+                        <a href="/bookclubs" class="btnMain3"> join a club!</a>
                     </div>
                  
                 <% }else { %><p>I am a member of:</p>
@@ -36,7 +40,7 @@
 
 
 
-                <% if (!user.finishedBooks) { %> <!--finsihed books-->
+                <% if (user.finishedBooks ==0) { %> <!--finsihed books-->
                     <div>
                         <p> No finished books yet!</p>
                     </div>
@@ -49,9 +53,7 @@
                             <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />
                             <p class="text-center" style="font-size: 0.8em;"><%= user.finishedBooks[i].title %></p>
                           </div>
-                          <% if ((i + 1) % 3 === 0) { %>
-                            </div><div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
-                          <% } %>
+                          
                           <%}%>
                         <%}%>
                         </div>
@@ -77,7 +79,7 @@
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="profileModalLabel">Edit info</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
 
 

@@ -23,7 +23,7 @@ module.exports = {
           const user = await User.findById(req.user._id)
             .populate('bookClubs', 'name')
             .populate('currentBooks', 'title')
-            .populate('finishedBooks', 'title')
+            .populate('finishedBooks', 'title cover_image')
             .exec();
       
           res.render("profile.ejs", { user: user });
@@ -200,16 +200,18 @@ module.exports = {
       
           // Obtaining the book data from the Open Library API
           const coverImage = bookData.cover_image
+          
 
       
           // Create a new book instance
           const newBook = new Book({
             title: [bookData.title],
-            author: bookData.authors,
+            author: [bookData.author],
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
-            cover_image: coverImage
+            cover_image: coverImage,
+            startDate: new Date(),
           });
 
           
@@ -260,6 +262,33 @@ module.exports = {
         }
 
       },
+      addNextLink: async(req, res, next) =>{
+        try{
+          const clubId = req.params._id;
+         
+          const club = await Club.findById(clubId).populate('nextBook', 'id')
+          const nextBook = club.nextBook._id
+          const { url } = req.body;
+          const updateFields = {};
+
+          if (url) {
+            updateFields.url = url;
+          }
+
+          const updatedBook= await Book.findByIdAndUpdate(nextBook, { $set: updateFields } ,{ new: true })
+          
+          if (!updatedBook) {
+            // Handle the case where the book club is not found
+            return res.status(404).json({ error: "Book club not found" });
+          }
+          res.redirect('/bookclubPage/'+ clubId)
+      
+
+        } catch (err) {
+          next(err);
+        }
+
+      },
 
 
       addNextBook: async (req, res, next) => {
@@ -269,7 +298,7 @@ module.exports = {
             const bookData = req.body;
             
 
-          const userId = req.user._id; // Assuming you're using passport for authentication
+          const userId = req.user._id; 
           const clubId = req.params._id;
       
           // Find the user and club by their IDs
@@ -282,6 +311,7 @@ module.exports = {
           const coverImage = bookData.cover_image
           
           
+          
 
       
           // Obtain the book data from the Open Library API
@@ -290,7 +320,7 @@ module.exports = {
           // Create a new book instance
           const newBook = new Book({
             title: [bookData.title],
-            author: [bookData.authors],
+            author: [bookData.author],
             url: bookData.preview_url,
             num_pages: bookData.number_of_pages,
             editions: bookData.edition_count,
@@ -312,33 +342,38 @@ module.exports = {
         }
       },
 
-      finishBook: async (req, res, next) => {
-        try {
-          
-            const clubId = req.params._id;
-            const club = await Club.findById(clubId).populate('members');
-            const finishedBook = club.currentBook._id;
+        finishBook: async (req, res, next) => {
+          try {
             
-            club.members.forEach(async (member) => {
-                member.finishedBooks.push(finishedBook);
-                member.currentBook = null
-                member.currentBook = club.nextBook;
-                await member.save();
-              });
-          
+              const clubId = req.params._id;
+              const club = await Club.findById(clubId).populate('members');
+              const finishedBook = club.currentBook._id;
+               finishedBook.finishDate = new Date(); 
+              await finishedBook.save();
+              
+              club.members.forEach(async (member) => {
+                  member.finishedBooks.push(finishedBook);
+                  member.currentBook = null
+                  member.currentBook = club.nextBook;
+                  await member.save();
+                });
+            
 
-    
-    club.finishedBooks.push(finishedBook);
-    
-    club.currentBook = club.nextBook;
-    club.nextBook = null;
-    await club.save();
-          
-                res.redirect("/bookclubPage/" + clubId);
-                }catch (err) {
-          next(err);
-        }
-      },
+      
+      club.finishedBooks.push(finishedBook);
+      club.currentBook = club.nextBook;
+      club.currentBook.startDate = new Date,
+      await currentBook.save();
+
+
+      club.nextBook = null;
+      await club.save();
+            
+                  res.redirect("/bookclubPage/" + clubId);
+                  }catch (err) {
+            next(err);
+          }
+        },
 
 
 
@@ -349,7 +384,7 @@ module.exports = {
          
              
       
-          const { bio, name } = req.body;
+          const { bio, name, Url } = req.body;
          
           
       
@@ -386,6 +421,9 @@ module.exports = {
           }
           if (name) {
             updateFields.name = name;
+          }
+          if (Url) {
+            updateFields.discordURL = Url;
           }
           
       
