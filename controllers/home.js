@@ -14,6 +14,10 @@ module.exports = {
         
       res.render("index.ejs", { user: req.user });
     },
+    getAbout: (req, res) => {
+        
+      res.render("about.ejs", { user: req.user });
+    },
     getSignUp: (req, res) => {
       res.render("signUp.ejs", { user: req.user });
     },
@@ -241,11 +245,35 @@ module.exports = {
          
           const club = await Club.findById(clubId).populate('currentBook', 'id')
           const currentBook = club.currentBook._id
-          const { url } = req.body;
+
+          const { url, authors, bookName} = req.body;
           const updateFields = {};
 
           if (url) {
             updateFields.url = url;
+          }
+          if (bookName) {
+            updateFields.title = bookName;
+          }
+          if (authors) {
+            updateFields.author = authors;
+          }
+          if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
+               
+                
+                
+            const image = result.secure_url;
+            
+            updateFields.cover_image = image;
+            
+            
+            
+            
+            if (result.error) {
+                console.error("Cloudinary upload error:", result.error);
+                throw new Error(result.error.message);
+              }
           }
 
           const updatedBook= await Book.findByIdAndUpdate(currentBook, { $set: updateFields } ,{ new: true })
@@ -268,11 +296,35 @@ module.exports = {
          
           const club = await Club.findById(clubId).populate('nextBook', 'id')
           const nextBook = club.nextBook._id
-          const { url } = req.body;
+          const { url, bookName, authors } = req.body;
           const updateFields = {};
 
           if (url) {
             updateFields.url = url;
+          }
+
+          if (bookName) {
+            updateFields.title = bookName;
+          }
+          if (authors) {
+            updateFields.author = authors;
+          }
+          if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path, {folder:"samples"});
+               
+                
+                
+            const image = result.secure_url;
+            
+            updateFields.cover_image = image;
+            
+            
+            
+            
+            if (result.error) {
+                console.error("Cloudinary upload error:", result.error);
+                throw new Error(result.error.message);
+              }
           }
 
           const updatedBook= await Book.findByIdAndUpdate(nextBook, { $set: updateFields } ,{ new: true })

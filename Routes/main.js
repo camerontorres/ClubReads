@@ -8,6 +8,7 @@ const { ensureAuth, ensureGuest } = require("../middleware/auth");
 
 // Main Routes - simplified for now
 router.get("/", homeController.getIndex);
+router.get("/about", homeController.getAbout);
 router.get("/signUp", homeController.getSignUp);
 router.get("/profile", ensureAuth, homeController.getProfile)
 router.get("/bookclubs", homeController.getBookclubs)
@@ -28,9 +29,9 @@ router.post("/bookclubPage/:_id/join", ensureAuth, homeController.joinClub);
 router.post("/bookclubPage/:_id/leave", ensureAuth, homeController.leaveClub);
 
 router.post("/bookclubPage/:_id/addBook", ensureAuth, homeController.addBook);
-router.post("/bookclubPage/:_id/addCurrentLink", ensureAuth, homeController.addCurrentLink);
+router.post("/bookclubPage/:_id/addCurrentLink",upload.single("bookCover"), ensureAuth, homeController.addCurrentLink);
 router.post("/bookclubPage/:_id/addNextBook", ensureAuth, homeController.addNextBook);
-router.post("/bookclubPage/:_id/addNextLink", ensureAuth, homeController.addNextLink);
+router.post("/bookclubPage/:_id/addNextLink",upload.single("bookCover"), ensureAuth, homeController.addNextLink);
 
 router.post("/bookclubPage/:_id/finishBook", ensureAuth, homeController.finishBook);
 

@@ -1,6 +1,6 @@
 <%- include ('partials/header.ejs') %>
 <body>
-<div class="jumbotron text-light" style="background-image: url(/Public/images/mainPic.jpg);">
+<div class="jumbotron text-light" style="background-image: url(/Public/images/mainPic.jpg); height: 100%;">
     <div class="overlay"></div>
     
     <div class="content-container">
@@ -28,28 +28,31 @@
             <div class="row d-flex flex-row justify-content-center">
            
 
-               
-            <div class="d-flex flex-row justify-content-between my-auto text-nowrap" style="width: 100%;">
-                        <div class=" col-3 my-5">
-                            <a href="#" class="btnMain btn-primary nowrap text-nowrap"> view my club</a>
+        <div class="d-flex justify-content-center">
+            <div class="d-flex flex-column flex-md-row  align-items-center justify-content-between my-auto text-nowrap flex-wrap" style="width: 100%;">
+                        <div class=" col-md-3 my-5">
+                            <a href="#" class="btnMain btn-primary nowrap text-nowrap"> view my club (WIP)</a>
                         </div>
-                        <div class=" col-3  my-5">
-                            <a href="#" class="btnMain btn-primary text-nowrap"> view my book</a>
+                        <div class=" col-md-3  my-5">
+                            <a href="#" class="btnMain btn-primary text-nowrap"> view my book (WIP)</a>
                         </div>
-                        <div class=" col-3  my-5">
+                        <div>
+                        <div class=" col-md-3  my-5">
                             <a href="/bookclubs" class="btnMain btn-primary text-nowrap"> view clubs</a>
                         </div>
+                    </div>
 
                 
                    
                 
                     <div>
-                        <div class="col-3  my-5">
+                        <div class="col-md-3  my-5">
                             <a href="/logout" class="btnMain2 btn-danger text-nowrap"> logout</a>
                         </div>
                         
                     </div>
                 </div>
+            </div>
                 
         </div>
             
