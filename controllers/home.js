@@ -14,6 +14,22 @@ module.exports = {
         
       res.render("index.ejs", { user: req.user });
     },
+    getReadingList: async (req, res, next) => {
+      try{
+        
+        const user = await User.findById(req.params._id)
+        .populate('bookClubs', 'name')
+        .populate('currentBooks', 'title cover_image')
+        .populate('finishedBooks', 'title cover_image')
+        .exec();
+        
+      res.render("readingList.ejs", { user: user })
+      }catch (err) {
+        next(err);
+      }
+    },
+
+
     getAbout: (req, res) => {
         
       res.render("about.ejs", { user: req.user });
@@ -78,9 +94,9 @@ module.exports = {
             
             .populate('members', 'name userName _id')
             .populate('mod', 'name')
-            .populate('currentBook', 'title cover_image author url')
+            .populate('currentBook', 'title cover_image author url startDate')
             .populate('nextBook', 'title cover_image author url')
-            .populate('finishedBooks', 'title cover_image url ')
+            .populate('finishedBooks', 'title cover_image url finishDate')
             .exec();
             
             const user = await User.findById(req.user.id)
@@ -414,7 +430,7 @@ module.exports = {
       
       club.finishedBooks.push(finishedBook);
       club.currentBook = club.nextBook;
-      club.currentBook.startDate = new Date,
+      club.currentBook.startDate = new Date(),
       await currentBook.save();
 
 

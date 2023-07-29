@@ -65,8 +65,8 @@
                   
           <!------------->
       
-      <div class="row p-0 m-0" style="width: 100vw;">
-        <div class="col-12 p-0 m-0">
+      <div class="row p-0 m-0 bg bg-light" style="width: 100vw;">
+        <div class="col-12 p-0 m-0 bg bg-secondary">
 
             <% if (!user.finishedBooks) { %> <!--finsihed books-->
                 <div>
@@ -74,8 +74,8 @@
                 </div>
                 <div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
              
-            <% }else { %> <p class="text-center">finished books:</p>
-                <ul class="bookList">
+            <% }else { %> <p class="text-center">Finished books:</p>
+                <ul class="bookList bg bg-secondary">
                 <% for( let i = 0; i < user.finishedBooks.length; i++ ) { %>
                     <div class="d-flex flex-column mx-3 my-2 thumbnailImgDiv">
                         <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />

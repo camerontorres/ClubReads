@@ -11,6 +11,7 @@ router.get("/", homeController.getIndex);
 router.get("/about", homeController.getAbout);
 router.get("/signUp", homeController.getSignUp);
 router.get("/profile", ensureAuth, homeController.getProfile)
+router.get("/readingList", ensureAuth, homeController.getReadingList)
 router.get("/bookclubs", homeController.getBookclubs)
 router.get("/bookclubPage/:_id",ensureAuth, homeController.getBookclubPage)
 router.get("/profileView/:_id",ensureAuth, homeController.getViewProfile)

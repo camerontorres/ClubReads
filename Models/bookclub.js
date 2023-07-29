@@ -14,6 +14,7 @@ const clubSchema = new mongoose.Schema({
   discordURL:{ type: String},
   
   
+  
 
 });
 

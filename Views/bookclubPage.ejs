@@ -81,11 +81,15 @@
 
                         
                 <% if (bookclub.currentBook) { %>
-                   <p>Our current book:</p> <img  class="bookPreview" src="<%= bookclub.currentBook.cover_image %>" alt=""> <h4><%=bookclub.currentBook.title %></h4>
+                   <p>We are currently reading:</p> <img  class="bookPreview m-3" src="<%= bookclub.currentBook.cover_image %>" alt=""> <h4><%=bookclub.currentBook.title %></h4>
                    <p>By <%= bookclub.currentBook.author[0] %></p>
                    <% if (bookclub.currentBook.url) { %>
                     <a href="<%=bookclub.currentBook.url%>"><p>Find it here</p></a>
                     <% } %>
+                    <% if (bookclub.currentBook.startDate) { %>
+                      <p> book started on <%=bookclub.currentBook.startDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })%></p>
+                      <% }%>
+                       
                     <% if (user.bookClubs.includes(bookclub._id)) { %>
                       
                     
@@ -291,11 +295,14 @@
       <p class="text-center">We haven't finished any books yet!</p>
     <% } %>
     <% if (bookclub.finishedBooks && bookclub.finishedBooks.length > 0) { %>
+      <p class="text-center">Our previous books:</p>
       <div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
+        
         <% for (let i = 0; i < bookclub.finishedBooks.length; i++) { %>
           <div class="d-flex flex-column mx-3 my-2">
             <img class="thumbnailImg" src="<%= bookclub.finishedBooks[i].cover_image %>" />
             <p class="text-center" style="font-size: 0.8em;"><%= bookclub.finishedBooks[i].title %></p>
+            <p><%=bookclub.finishedBooks[i].finishDate%></p>
           </div>
           
         <% } %>
@@ -326,7 +333,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="nextURLModalLabel">Add a shopping link for the book!</h5>
+                                <h5 class="modal-title" id="nextURLModalLabel">Edit book</h5>
                                 <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
@@ -335,7 +342,7 @@
                                         <form action="/bookclubPage/<%= bookclub._id %>/addNextLink" method="POST" >
                                             <input type="hidden" name="_method" value="PUT">
                      
-                                            <label for="nameChange" class="form-label">Add shopping link</label>
+                                            <label for="nameChange" class="form-label">Add a shopping link</label>
                                             <input type="text" class="form-control" id="nextBookURL" name="url">
 
                                             <label for="bookCoverUpload" class="form-label">Book Cover</label>

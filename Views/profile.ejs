@@ -9,21 +9,28 @@
                  <img  class="profPic" src="<%= user.profilePic %>">
                 
                 <h1><%= user.name %></h1>
+                <h5 class="m-3"><%= user.bio %></h5>
+                <div class="row mt-5">
+                    <div class="col-6">
                 <% if (user.currentBooks.length== 0) { %>
                     <p>you're not reading anything yet!</p>
                  
                 <% }else{ %>
-                <p>currently reading: <%=user.currentBooks.title %>
+                <p>Currently reading:</p>
                     <ul>
                         <% for( let i = 0; i < user.currentBooks.length; i++ ) { %>
                     
                          <li><%= user.currentBooks[i].title  %> </a></li>
                          <% } %>
-                        </ul></p>
+                        </ul>
                         <% } %>
+
+                    </div>
+                    <div class="col-6">
+
              <p><% if (user.bookClubs == 0) { %> <!--clubs-->
                     <div>
-                        <a href="/bookclubs" class="btnMain3"> join a club!</a>
+                        <a href="/bookclubs" class="btnMain3"> Join a club!</a>
                     </div>
                  
                 <% }else { %><p>I am a member of:</p>
@@ -35,8 +42,10 @@
                      <% } %>
                     </ul>
                 </p>
+            </div>
+            </div>
                 
-                <p>user since: <%= user.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
+                
 
 
 
@@ -44,10 +53,10 @@
                     <div>
                         <p> No finished books yet!</p>
                     </div>
-                    <div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
+                    <div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center bg bg-light">
                  
-                <% }else { %> <p class="text-center">finished books:</p>
-                    <ul class="bookList">
+                <% }else { %> <p class="text-center ">Finished books:</p>
+                    <ul class="bookList bg bg-light">
                     <% for( let i = 0; i < user.finishedBooks.length; i++ ) { %>
                         <div class="d-flex flex-column mx-3 my-2 thumbnailImgDiv">
                             <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />
@@ -57,6 +66,7 @@
                           <%}%>
                         <%}%>
                         </div>
+                        <p class="text-center">User since: <%= user.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
                         
                           
                         
@@ -136,6 +146,7 @@
       
   </div>
 </div>
+
 
 <%- include ('partials/footer.ejs') %>
 

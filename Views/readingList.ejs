@@ -1,0 +1,33 @@
+<%- include('partials/header') -%>
+<section id="banner" class="d-flex justify-content-center align-content-center" style="background-image: url('/public/images/login.jpg'); height: 13em;position: relative;">
+    <div class="overlay" style="height: 13em;"></div>
+        
+        <div class="content-container mx-auto my-auto" style="position: relative; z-index: 3;">
+            <h1 class="text-center mx-auto my-auto" style="color: #FBFBFB;;">My Reading List</h1>
+        </div>
+                        
+    </section>
+
+<div class="container-fluid">
+  
+    <div class="row" style="min-height: 300px">
+        <div class="col-12 ">
+            <% if (user.currentBooks.length== 0) { %>
+                <h3 class="text-center">There's nothing on your reading list!</h3>
+                <div class="text-center">
+                    <a href="/bookclubs" class="btnMain3"> Join a club!</a>
+                </div>
+             
+            <% }else{ %>
+                <ul>
+                    <% for( let i = 0; i < user.currentBooks.length; i++ ) { %>
+                
+                     <li><%= user.currentBooks[i].title  %> </a> helllo</li>
+                     <% } %>
+                    </ul>
+        </div>
+    </div>
+   <%}%>
+</div>
+
+<%- include ('partials/footer.ejs') %>
