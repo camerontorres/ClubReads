@@ -11,10 +11,10 @@
     </section>
     <div>
             <h2 class="text-center my-5">Available clubs:</h2>
-            <div class="container" style="height: 100%;">
-            <ul style="width: 80vw;">
+            <div class="contentBox justify-content-center align-items-start" style="height: auto;">
+            <ul class="mx-auto" style="width: 80vw; object-position: top;">
                 <% for( let i = 0; i < bookClubs.length; i++ ) { %>
-                    <li class="<%= i % 2 === 0 ? 'even-background' : '' %> clubListLi " style="display: flex; align-items: center;;">
+                    <li class="<%= i % 2 === 0 ? 'even-background' : '' %> clubListLi " style="display: flex; align-items: center; ">
                     <a class="col-6" href="/bookclubPage/<%= bookClubs[i]._id %>" style=" display: flex; align-items: center;">
                         <img class="clubPicMini" src="<%= bookClubs[i].clubPic %>" style="object-fit: fill;">
                         <p class="pl-2 my-auto clubListName" style=" font-size: 1.5em;"><%= bookClubs[i].name %></p>

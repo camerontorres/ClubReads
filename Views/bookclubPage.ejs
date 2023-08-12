@@ -8,7 +8,10 @@
 
         <ul id="">
             <li><%= bookclub.desc %></li>
-            <li class="m-2"><a  class="btnMain3" href="<%= bookclub.discordURL %>"> Visit our Discord <span class="fa-brands fa-discord"></span></a></li>
+            <% if (bookclub.discordURL) { %>
+              <li class="m-2"><a  class="btnMain3" href="<%= bookclub.discordURL %>"> Visit our Discord <span class="fa-brands fa-discord"></span></a></li>
+            <% } %>
+             
             <li>
                 <%= bookclub.members ? 'Members: ' : 'No members yet!' %>
                 <% if (bookclub.members && bookclub.members.length > 0) { %>
@@ -302,7 +305,10 @@
           <div class="d-flex flex-column mx-3 my-2">
             <img class="thumbnailImg" src="<%= bookclub.finishedBooks[i].cover_image %>" />
             <p class="text-center" style="font-size: 0.8em;"><%= bookclub.finishedBooks[i].title %></p>
-            <p><%=bookclub.finishedBooks[i].finishDate%></p>
+            <% if (bookclub.finishedBooks[i].finishDate) { %>
+              <p class="text-center">Finished on <%= bookclub.finishedBooks[i].finishDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
+            <% } %>
+            
           </div>
           
         <% } %>
@@ -374,7 +380,7 @@
     <% } else  { %>
         We dont have anything lined up!
         <!--edit club modal starts-->
-        <% if (user.bookClubs.includes(bookclub._id)) { %>
+        <% if (user.bookClubs.includes(bookclub._id) && bookclub.currentBook) { %>
         <div>
           <button type="button" id="addNextBook" class="addNextBookBtn btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addNextBookModal">
               Add next book!

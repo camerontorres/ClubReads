@@ -193,6 +193,20 @@
     align-items: center;
     min-height: 100vh;
   }
+  .contentBox{
+    padding: 0 20px; /* Adjust the padding values as needed */
+    margin: 0 auto;
+  }
+
+  .hide-books {
+    display: none;
+}
+
+#loadMoreButton {
+    display: block;
+    margin: 0 auto;
+    /* Add other button styling */
+}
 
   .btn{
     margin: 10px;

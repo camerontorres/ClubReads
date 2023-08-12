@@ -71,14 +71,15 @@ module.exports = {
       getViewProfile: async (req, res, next) => {
         try {
 
-            const user = await User.findById(req.params._id)
-            .populate('bookClubs', 'name')
+            const viewUser = await User.findById(req.params._id)
+            .populate('bio')
+            .populate('bookClubs', 'name',)
             .populate('currentBooks', 'title cover_image')
             .populate('finishedBooks', 'title cover_image')
             .exec();
             
     
-            res.render("profileView.ejs", { user: user });
+            res.render("profileView.ejs", { user: viewUser });
         } catch (err) {
           return next(err);
         }
@@ -414,24 +415,40 @@ module.exports = {
           try {
             
               const clubId = req.params._id;
-              const club = await Club.findById(clubId).populate('members');
-              const finishedBook = club.currentBook._id;
+              const club = await Club.findById(clubId)
+              .populate({
+                path: 'members',
+                populate: { path: 'finishedBooks', model: 'Book' }
+              })
+              .populate('currentBook');
+              
+              const finishedBookId = club.currentBook._id;
+              
+              const finishedBook = await Book.findById(finishedBookId);
+              
+              
                finishedBook.finishDate = new Date(); 
               await finishedBook.save();
               
               club.members.forEach(async (member) => {
+                
                   member.finishedBooks.push(finishedBook);
                   member.currentBook = null
                   member.currentBook = club.nextBook;
                   await member.save();
                 });
+              
             
 
       
       club.finishedBooks.push(finishedBook);
+      if(club.nextbook != null || undefined){
       club.currentBook = club.nextBook;
       club.currentBook.startDate = new Date(),
       await currentBook.save();
+      }else{
+        club.currentBook = null
+      }
 
 
       club.nextBook = null;

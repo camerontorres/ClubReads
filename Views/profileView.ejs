@@ -8,6 +8,7 @@
                 <img  class="profPic" src='<%= user.profilePic %>'>
                 
                 <h1><%= user.name %></h1>
+                <h5><%= user.bio %></h5>
                 <p>user since: <%= user.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
                 </div>
             </div>
@@ -20,19 +21,19 @@
             <div class="mt-5 mb-5">
               <div class="mb-3 d-flex flex-column">
                 
-                <p>currently reading: <%=user.currentBooks.title %>
+                <p><strong>currently reading: </strong></p>
                     <ul>
                         <% for( let i = 0; i < user.currentBooks.length; i++ ) { %>
                     
                          <li><%= user.currentBooks[i].title  %> </a></li>
                          <% } %>
-                        </ul></p>
+                        </ul>
                 <p><% if (!user.bookClubs) { %>
                     <div>
-                        <a href="/bookclubs" class="btn btn-danger"> join a club, nerd</a>
+                        <a href="/bookclubs" class="btn btn-danger"> join a club!</a>
                     </div>
                  
-                <% }else { %>these are my clubs: 
+                <% }else { %><strong>these are my clubs:</strong> 
                     <ul>
                     <% for( let i = 0; i < user.bookClubs.length; i++ ) { %>
                 
@@ -66,31 +67,66 @@
           <!------------->
       
       <div class="row p-0 m-0 bg bg-light" style="width: 100vw;">
-        <div class="col-12 p-0 m-0 bg bg-secondary">
+        <div class="col-12 p-0 m-0 bg bg-light">
 
             <% if (!user.finishedBooks) { %> <!--finsihed books-->
                 <div>
-                    <p> No finished books yet!</p>
+                    <p><strong>No finished books yet!</strong> </p>
                 </div>
-                <div class="finishedContainer p-0 m-0 flex-wrap d-flex justify-content-center">
+                <div class="finishedContainer finishedBooksContainer p-0 m-0 flex-wrap d-flex justify-content-center">
              
-            <% }else { %> <p class="text-center">Finished books:</p>
-                <ul class="bookList bg bg-secondary">
-                <% for( let i = 0; i < user.finishedBooks.length; i++ ) { %>
-                    <div class="d-flex flex-column mx-3 my-2 thumbnailImgDiv">
-                        <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />
-                        <p class="text-center" style="font-size: 0.8em;"><%= user.finishedBooks[i].title %></p>
-                      </div>
-                    
-                      <%}%>
+            <% }else { %> <p class="text-center"><strong>Finished books:</strong> </p>
+                <ul class="bookList bg bg-light">
+                    <% for( let i = 0; i < Math.min(9, user.finishedBooks.length); i++ ) { %>
+                        <div class="d-flex flex-column mx-3 my-2 thumbnailImgDiv <%= i > 8 ? 'hide-books' : '' %>">
+                            <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />
+                            <p class="text-center" style="font-size: 0.8em;"><%= user.finishedBooks[i].title %></p>
+                        </div>
+                    <% } %>
+                      
                     <%}%>
                     </div>
                     </div>
 
+                  
+                    
+
         </div>
-        </div>
+        </div><% if(user.finishedBooks.length > 9 ) {%>
+        <button  class="btnMain3" id="loadMoreButton">Load More</button>
+        <% } %>
 
     </div>
+    <script>
+           const finishedBooksContainer = document.getElementById('finishedBooksContainer');
+    const loadMoreButton = document.getElementById('loadMoreButton');
+
+    let visibleBooks = 9; 
+    const totalBooks =  user.finishedBooks.length  
+
+    loadMoreButton.addEventListener('click', () => {
+        visibleBooks += 9; 
+        showBooks();
+    });
+
+    function showBooks() {
+        const books = finishedBooksContainer.children;
+        for (let i = 0; i < books.length; i++) {
+            if (i < visibleBooks) {
+                books[i].classList.remove('hide-books');
+            } else {
+                books[i].classList.add('hide-books');
+            }
+        }
+
+        if (visibleBooks >= totalBooks) {
+            loadMoreButton.style.display = 'none';
+        }
+    }
+
+    // Initial display
+    showBooks();
+    </script>
       
       
       
