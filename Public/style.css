@@ -4,6 +4,14 @@
     --red: #E17571; 
     --blue: #3B4568;
     --white: #FBFBFB;
+    --fc-button-text-color: #fff;
+    --fc-button-bg-color: #3B4568;
+    --fc-button-border-color: #2C3E50;
+    --fc-button-hover-bg-color: #1e2b37;
+    --fc-button-hover-border-color: #1a252f;
+    --fc-button-active-bg-color: #1a252f;
+    --fc-button-active-border-color: #151e27;
+    --fc-today-bg-color: rgba(40, 255, 72, 0.25);
   }
 
   .pageTitle{
@@ -68,7 +76,7 @@
   
     border: .5px solid #3B4568;
     border-radius: 50%;
-    object-fit: contain;
+    object-fit: cover;
 
 }
 
@@ -387,6 +395,12 @@
 
 .user-member .addBookBtn {
     display: block; /* Show the button if the user is a member */
+}
+
+#calendar{
+  max-width: 300px;
+  max-height: 300px;
+
 }
 
 

@@ -5,11 +5,11 @@
           <div class="text-center">
             <div class="mt-5 mb-5">
                 <div class="mb-3">
-                <img  class="profPic" src='<%= user.profilePic %>'>
+                <img  class="profPic" src='<%= member.profilePic %>'>
                 
-                <h1><%= user.name %></h1>
-                <h5><%= user.bio %></h5>
-                <p>user since: <%= user.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
+                <h1><%= member.name %></h1>
+                <h5><%= member.bio %></h5>
+                <p>user since: <%= member.joinDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }) %></p>
                 </div>
             </div>
         </div>
@@ -23,21 +23,21 @@
                 
                 <p><strong>currently reading: </strong></p>
                     <ul>
-                        <% for( let i = 0; i < user.currentBooks.length; i++ ) { %>
+                        <% for( let i = 0; i < member.currentBooks.length; i++ ) { %>
                     
-                         <li><%= user.currentBooks[i].title  %> </a></li>
+                         <li><%= member.currentBooks[i].title  %> </a></li>
                          <% } %>
                         </ul>
-                <p><% if (!user.bookClubs) { %>
+                <p><% if (!member.bookClubs) { %>
                     <div>
                         <a href="/bookclubs" class="btn btn-danger"> join a club!</a>
                     </div>
                  
                 <% }else { %><strong>these are my clubs:</strong> 
                     <ul>
-                    <% for( let i = 0; i < user.bookClubs.length; i++ ) { %>
+                    <% for( let i = 0; i < member.bookClubs.length; i++ ) { %>
                 
-                     <li class=" clubList"><a href="/bookclubPage/<%= user.bookClubs[i]._id %>"><%= user.bookClubs[i].name  %> </a></li>
+                     <li class=" clubList"><a href="/bookclubPage/<%= member.bookClubs[i]._id %>"><%= member.bookClubs[i].name  %> </a></li>
                      <% } %>
                      <% } %>
                     </ul>
@@ -69,7 +69,7 @@
       <div class="row p-0 m-0 bg bg-light" style="width: 100vw;">
         <div class="col-12 p-0 m-0 bg bg-light">
 
-            <% if (!user.finishedBooks) { %> <!--finsihed books-->
+            <% if (!member.finishedBooks) { %> <!--finsihed books-->
                 <div>
                     <p><strong>No finished books yet!</strong> </p>
                 </div>
@@ -77,10 +77,10 @@
              
             <% }else { %> <p class="text-center"><strong>Finished books:</strong> </p>
                 <ul class="bookList bg bg-light">
-                    <% for( let i = 0; i < Math.min(9, user.finishedBooks.length); i++ ) { %>
+                    <% for( let i = 0; i < Math.min(9, member.finishedBooks.length); i++ ) { %>
                         <div class="d-flex flex-column mx-3 my-2 thumbnailImgDiv <%= i > 8 ? 'hide-books' : '' %>">
-                            <img class="thumbnailImg" src="<%= user.finishedBooks[i].cover_image %>" />
-                            <p class="text-center" style="font-size: 0.8em;"><%= user.finishedBooks[i].title %></p>
+                            <img class="thumbnailImg" src="<%= member.finishedBooks[i].cover_image %>" />
+                            <p class="text-center" style="font-size: 0.8em;"><%= member.finishedBooks[i].title %></p>
                         </div>
                     <% } %>
                       
@@ -92,7 +92,7 @@
                     
 
         </div>
-        </div><% if(user.finishedBooks.length > 9 ) {%>
+        </div><% if(member.finishedBooks.length > 9 ) {%>
         <button  class="btnMain3" id="loadMoreButton">Load More</button>
         <% } %>
 
@@ -102,7 +102,7 @@
     const loadMoreButton = document.getElementById('loadMoreButton');
 
     let visibleBooks = 9; 
-    const totalBooks =  user.finishedBooks.length  
+    const totalBooks =  member.finishedBooks.length  
 
     loadMoreButton.addEventListener('click', () => {
         visibleBooks += 9; 

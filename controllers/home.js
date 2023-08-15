@@ -4,6 +4,7 @@ const multer = require('../middleware/multer');
 const User = require("../Models/user");
 const Club = require("../Models/bookclub");
 const Book = require("../Models/book");
+const Calendar = require('../Models/calendar');
 
 
 
@@ -78,8 +79,9 @@ module.exports = {
             .populate('finishedBooks', 'title cover_image')
             .exec();
             
+            
     
-            res.render("profileView.ejs", { user: viewUser });
+            res.render("profileView.ejs", { member: viewUser, user: req.user });
         } catch (err) {
           return next(err);
         }

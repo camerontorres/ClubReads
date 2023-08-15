@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
   finishedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
   profilePic: { type: String, default: '/Public/images/default.jpg' },
   password: { type: String, required: true },
-  joinDate: { type: Date, required: true, default: Date.now }
+  joinDate: { type: Date, required: true, default: Date.now },
+  calendar: { type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' }
   
   
 

@@ -12,6 +12,7 @@ const clubSchema = new mongoose.Schema({
   mod: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   created_at: { type: Date, required: true, default: Date.now },
   discordURL:{ type: String},
+  calendar: { type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' }
   
   
   
