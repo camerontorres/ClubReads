@@ -38,7 +38,63 @@
                 </button>
             </div>
             <% } %>
-            <div id='calendar'></div>
+            <div id='calendar'>
+              
+              <form action="/bookclubPage/<%= bookclub._id %>/makeEvent" method="POST" enctype="multipart/form-data" >
+                <input type="hidden" name="_method" value="PUT">
+                <button id="addEventButton" class="btn btn-primary">Add Event</button>
+                <script>
+                   // Function to open the event modal
+ 
+                  // Event listener for the Add Event button
+                  const addEventButton = document.getElementById('addEventButton');
+                  addEventButton.addEventListener('click', () => {
+                    const eventTitle = prompt('Enter event title:');
+                    const eventStart = prompt('Enter event start date (YYYY-MM-DD HH:mm):');
+                    const eventEnd = prompt('Enter event end date (YYYY-MM-DD HH:mm):');
+                    
+                    
+                
+                    // Validate inputs and create the event
+                    if (eventTitle && eventStart && eventEnd) {
+                      const eventData = {
+                        title: eventTitle,
+                        start: new Date(eventStart),
+                        end: new Date(eventEnd)
+                      };
+                      
+                
+                      // Send eventData to the server via AJAX for saving
+                      
+                      // For example, you can use the fetch API to send the data to your server:
+                      fetch(`/bookclubPage/${clubId}/makeEvent`, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(eventData),
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                        // Handle the server's response (if needed)
+                      })
+                      .catch(error => {
+                        console.error('Error:', error);
+                      });
+
+                    }
+                    
+                  });
+                  
+                </script>
+                 </form>
+                 <form action="/bookclubPage/<%= bookclub._id %>/addCurrentLink" method="POST" enctype="multipart/form-data" >
+                  <input type="hidden" name="_method" value="PUT">
+                 <button class="btn btn-primary"> edit</button>
+                 </form>
+            
+           
+            </div> 
             <!--edit club modal starts-->
     
             <div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">

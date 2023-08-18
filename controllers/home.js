@@ -5,6 +5,7 @@ const User = require("../Models/user");
 const Club = require("../Models/bookclub");
 const Book = require("../Models/book");
 const Calendar = require('../Models/calendar');
+const calendar = require("../Models/calendar");
 
 
 
@@ -92,6 +93,7 @@ module.exports = {
         try {
            
             const bookclub = await Club.findById(req.params._id)
+            
             
 
             
@@ -461,6 +463,30 @@ module.exports = {
             next(err);
           }
         },
+        createEvent: async (req, res, next) => {
+          try {
+            const clubId = req.params._id;
+            const eventData = req.body; // Assuming eventData includes title, start, and end properties
+        
+            // Update the club's calendar
+            const club = await Club.findById(clubId);
+            club.calendar.push(eventData);
+            await club.save();
+        
+            // Update the user's calendar
+            const clubMembers = club.members;
+            await User.updateMany(
+              { _id: { $in: clubMembers } },
+              { $push: { calendar: eventData } }
+            );
+        
+            res.json({ success: true });
+          } catch (err) {
+            console.error('Error creating event:', err);
+            res.status(500).json({ success: false, message: 'Failed to create event' });
+          }
+        },
+
 
 
 
