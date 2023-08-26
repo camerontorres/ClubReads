@@ -176,10 +176,6 @@ module.exports = {
       },
 
       
-
-    
-
-
       postNewClub: async (req, res, next) => {
         try {
           const userId = req.user._id;
@@ -467,13 +463,27 @@ module.exports = {
           try {
             const clubId = req.params._id;
             const eventData = req.body; // Assuming eventData includes title, start, and end properties
+
+            const calendar = new Calendar({
+              title: eventData.title,
+              start: eventData.start,
+              end: eventData.end,
+             
+            });
+            calendar.save()
+          .then((savedCalendar) => {
+            // Handle the success case
+            console.log('Event created successfully:', savedCalendar);
+          res.json({ success: true });
+            })
+            
         
             // Update the club's calendar
             const club = await Club.findById(clubId);
             club.calendar.push(eventData);
             await club.save();
         
-            // Update the user's calendar
+            // Update the user's calendar for club members
             const clubMembers = club.members;
             await User.updateMany(
               { _id: { $in: clubMembers } },

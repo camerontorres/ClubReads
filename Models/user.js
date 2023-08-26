@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
   profilePic: { type: String, default: '/Public/images/default.jpg' },
   password: { type: String, required: true },
   joinDate: { type: Date, required: true, default: Date.now },
-  calendar: { type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' }
+  calendar: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Calendar' }],
   
   
 

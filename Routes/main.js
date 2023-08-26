@@ -36,7 +36,7 @@ router.post("/bookclubPage/:_id/addNextLink",upload.single("bookCover"), ensureA
 
 router.post("/bookclubPage/:_id/finishBook", ensureAuth, homeController.finishBook);
 
-router.post("/bookclubPage/:_id/makeEvent", ensureAuth, homeController.createEvent);
+router.post("/bookclubPage/:_id/createEvent", ensureAuth, homeController.createEvent);
 //router.post("/bookclubPage/:_id/removeEvent", ensureAuth, homeController.removeEvent);
 //router.post("/bookclubPage/:_id/editEvent", ensureAuth, homeController.editEvent);
 

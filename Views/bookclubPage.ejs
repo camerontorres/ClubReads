@@ -39,54 +39,52 @@
             </div>
             <% } %>
             <div id='calendar'>
-              
-              <form action="/bookclubPage/<%= bookclub._id %>/makeEvent" method="POST" enctype="multipart/form-data" >
-                <input type="hidden" name="_method" value="PUT">
+              <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST" enctype="multipart/form-data">
+                <!-- Use the correct HTTP method -->
+                <input type="hidden" name="_method" value="POST">
                 <button id="addEventButton" class="btn btn-primary">Add Event</button>
-                <script>
-                   // Function to open the event modal
- 
-                  // Event listener for the Add Event button
-                  const addEventButton = document.getElementById('addEventButton');
-                  addEventButton.addEventListener('click', () => {
-                    const eventTitle = prompt('Enter event title:');
-                    const eventStart = prompt('Enter event start date (YYYY-MM-DD HH:mm):');
-                    const eventEnd = prompt('Enter event end date (YYYY-MM-DD HH:mm):');
+              </form>
+              <script>
+                // Event listener for the Add Event button
+                const addEventButton = document.getElementById('addEventButton');
+                addEventButton.addEventListener('click', () => {
+                  const eventTitle = prompt('Enter event title:');
+                  const eventStartDate = prompt('Enter event start date (YYYY-MM-DD HH:mm):');
+                  const eventEnd = prompt('Enter event end date (YYYY-MM-DD HH:mm):'); // Uncomment this line if needed
+                  console.log(eventTitle)
+                  console.log(eventStart)
+                  console.log(eventEnd )
+            
+                  // Validate inputs and create the event
+                  if (eventTitle && eventStartDate) {
+                    const eventStart = new Date(eventStartDate);
+                    const eventData = {
+                      title: eventTitle,
+                      start: new Date(eventStart),
+                     end: new Date(eventEnd), // Uncomment this line if needed
+                    };
                     
-                    
-                
-                    // Validate inputs and create the event
-                    if (eventTitle && eventStart && eventEnd) {
-                      const eventData = {
-                        title: eventTitle,
-                        start: new Date(eventStart),
-                        end: new Date(eventEnd)
-                      };
-                      
-                
-                      // Send eventData to the server via AJAX for saving
-                      
-                      // For example, you can use the fetch API to send the data to your server:
-                      fetch(`/bookclubPage/${clubId}/makeEvent`, {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(eventData),
-                      })
-                      .then(response => response.json())
-                      .then(data => {
+                    console.log(eventData )
+            
+                    // Send eventData to the server via AJAX for saving
+                    // Use the correct clubId variable (e.g., <%= bookclub._id %>)
+                    fetch(`/bookclubPage/<%= bookclub._id %>/createEvent`, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(eventData),
+                    })
+                      .then((response) => response.json())
+                      .then((data) => {
                         // Handle the server's response (if needed)
                       })
-                      .catch(error => {
+                      .catch((error) => {
                         console.error('Error:', error);
                       });
-
-                    }
-                    
-                  });
-                  
-                </script>
+                  }
+                });
+              </script>
                  </form>
                  <form action="/bookclubPage/<%= bookclub._id %>/addCurrentLink" method="POST" enctype="multipart/form-data" >
                   <input type="hidden" name="_method" value="PUT">
