@@ -40,58 +40,41 @@
             <% } %>
             <div id='calendar'>
               <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST" enctype="multipart/form-data">
-                <!-- Use the correct HTTP method -->
+                
                 <input type="hidden" name="_method" value="POST">
-                <button id="addEventButton" class="btn btn-primary">Add Event</button>
+                <button id="addEventButton" type="button" class="btn btn-primary">Add Event</button>
+                
               </form>
-              <script>
-                // Event listener for the Add Event button
-                const addEventButton = document.getElementById('addEventButton');
-                addEventButton.addEventListener('click', () => {
-                  const eventTitle = prompt('Enter event title:');
-                  const eventStartDate = prompt('Enter event start date (YYYY-MM-DD HH:mm):');
-                  const eventEnd = prompt('Enter event end date (YYYY-MM-DD HH:mm):'); // Uncomment this line if needed
-                  console.log(eventTitle)
-                  console.log(eventStart)
-                  console.log(eventEnd )
-            
-                  // Validate inputs and create the event
-                  if (eventTitle && eventStartDate) {
-                    const eventStart = new Date(eventStartDate);
-                    const eventData = {
-                      title: eventTitle,
-                      start: new Date(eventStart),
-                     end: new Date(eventEnd), // Uncomment this line if needed
-                    };
-                    
-                    console.log(eventData )
-            
-                    // Send eventData to the server via AJAX for saving
-                    // Use the correct clubId variable (e.g., <%= bookclub._id %>)
-                    fetch(`/bookclubPage/<%= bookclub._id %>/createEvent`, {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(eventData),
-                    })
-                      .then((response) => response.json())
-                      .then((data) => {
-                        // Handle the server's response (if needed)
-                      })
-                      .catch((error) => {
-                        console.error('Error:', error);
-                      });
-                  }
-                });
-              </script>
+              <button id="openEventModal" class="btnMain3" data-bs-toggle="modal" data-bs-target="#eventModal">Add Event</button> <!-- this SHOULD open the modal-->
+
+                <!-----add event modal-->
+                <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="eventModalLabel">Edit info</h5>
+                      
+                    <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                  <span class="close">&times;</span>
+                  <h2>Add Event</h2>
+                  <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST">
+                      <input type="hidden" name="_method" value="PUT">
+                    <input type="text" name="title" placeholder="Event Title">
+                    <input type="text" name="start" placeholder="Event Start Date">
+                    <input type="text" name="end" placeholder="Event End Date">
+                    <button type="submit">Create Event</button>
+                  </form>
+                
+              </div>
                  </form>
                  <form action="/bookclubPage/<%= bookclub._id %>/addCurrentLink" method="POST" enctype="multipart/form-data" >
                   <input type="hidden" name="_method" value="PUT">
                  <button class="btn btn-primary"> edit</button>
                  </form>
-            
-           
+                </div>
+              </div>
+
             </div> 
             <!--edit club modal starts-->
     
