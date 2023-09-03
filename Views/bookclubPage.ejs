@@ -47,35 +47,52 @@
               </form>
               <button id="openEventModal" class="btnMain3" data-bs-toggle="modal" data-bs-target="#eventModal">Add Event</button> <!-- this SHOULD open the modal-->
 
-                <!-----add event modal-->
-                <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="eventModalLabel">Edit info</h5>
-                      
-                    <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                  <span class="close">&times;</span>
-                  <h2>Add Event</h2>
-                  <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST">
-                      <input type="hidden" name="_method" value="PUT">
-                    <input type="text" name="title" placeholder="Event Title">
-                    <input type="text" name="start" placeholder="Event Start Date">
-                    <input type="text" name="end" placeholder="Event End Date">
-                    <button type="submit">Create Event</button>
-                  </form>
-                
-              </div>
-                 </form>
-                 <form action="/bookclubPage/<%= bookclub._id %>/addCurrentLink" method="POST" enctype="multipart/form-data" >
-                  <input type="hidden" name="_method" value="PUT">
-                 <button class="btn btn-primary"> edit</button>
-                 </form>
-                </div>
+              
+            </div> 
+
+             <!-----add event modal-->
+             <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Event maker</h5>
+                    
+                  <button type="button" class="fa-regular fa-xmark" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
 
-            </div> 
+              <div class="modal-body">
+                <span class="close">&times;</span>
+                <h2>Add Event</h2>
+                <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+
+
+                    <div class="form-group">
+                  <label for="createEventName" class="form-label">Event Name</label>
+                  <input type="text" class="form-control" id="createEventName" name="name" placeholder="">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="startDateTime" class="form-label">Start Date and Time</label>
+                    <input type="datetime-local" class="form-control datetimepicker" id="startDateTime" name="start" placeholder="Select Start Date and Time">
+                  </div>
+        
+                  <div class="form-group">
+                    <label for="endDateTime" class="form-label">End Date and Time</label>
+                    <input type="datetime-local" class="form-control datetimepicker" id="endDateTime" name="end" placeholder="Select End Date and Time">
+                  </div>
+
+                  <button type="submit">Create Event</button>
+               
+                </form>
+              </div>
+              
+            </div>
+               
+               
+              </div>
+            </div>
+            
             <!--edit club modal starts-->
     
             <div class="modal fade" id="clubModal" tabindex="-1" role="dialog" aria-labelledby="clubModalLabel" aria-hidden="true">
@@ -580,6 +597,8 @@
               </form>
               <% } %>
             </div>
+
+            
 
        </div>
        

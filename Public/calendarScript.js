@@ -63,3 +63,36 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   calendar.render();
 });
+
+
+  // Function to initialize date picker
+  function initializeDatePicker() {
+    var datePickers = document.querySelectorAll('.datepicker');
+    datePickers.forEach(function(datePicker) {
+      new Datepicker(datePicker, {
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true
+      });
+    });
+  }
+
+  // Function to initialize time picker
+  function initializeTimePicker() {
+    var timePickers = document.querySelectorAll('.timepicker');
+    timePickers.forEach(function(timePicker) {
+      new Timepicker(timePicker, {
+        showMeridian: false,
+        minuteStep: 1,
+        defaultTime: false
+      });
+    });
+  }
+
+  // Initialize date and time pickers when the DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeDatePicker();
+    initializeTimePicker();
+  });
+
+
