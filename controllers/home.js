@@ -463,6 +463,8 @@ module.exports = {
           try {
             const clubId = req.params._id;
             const eventData = req.body; // Assuming eventData includes title, start, and end properties
+            eventData.start = new Date(eventData.start);
+            eventData.end = new Date(eventData.end);
 
             const calendar = new Calendar({
               title: eventData.title,
@@ -470,27 +472,24 @@ module.exports = {
               end: eventData.end,
              
             });
-            calendar.save()
-          .then((savedCalendar) => {
-            // Handle the success case
-            console.log('Event created successfully:', savedCalendar);
-          res.json({ success: true });
-            })
+            const savedCalendar = await calendar.save();
+         
             
         
             // Update the club's calendar
             const club = await Club.findById(clubId);
-            club.calendar.push(eventData);
+            club.calendar.push(savedCalendar);
             await club.save();
         
             // Update the user's calendar for club members
             const clubMembers = club.members;
             await User.updateMany(
               { _id: { $in: clubMembers } },
-              { $push: { calendar: eventData } }
+              { $push: { calendar: savedCalendar } }
             );
         
-            res.json({ success: true });
+            
+            res.redirect('/bookclubPage/'+ clubId)
           } catch (err) {
             console.error('Error creating event:', err);
             res.status(500).json({ success: false, message: 'Failed to create event' });
