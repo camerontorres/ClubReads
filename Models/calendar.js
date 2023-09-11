@@ -5,6 +5,7 @@ const calendarSchema = new mongoose.Schema({
     start: { type: Date, required: true },
     end: { type: Date},
     description: { type: String },
+    eventFor: { type: mongoose.Schema.Types.ObjectId, ref: 'Club' ,  required: true}
 
 });
 

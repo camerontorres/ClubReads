@@ -25,6 +25,7 @@ function createEvent(eventData, clubId) {
 }
 
 function openEventModal(selectedDate) {
+  
   console.log(`Selected date: ${selectedDate}`);
   
   const createEvent = window.confirm(`No events on ${selectedDate}, would you like to create one?`);
@@ -47,22 +48,22 @@ function openEventModal(selectedDate) {
 
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
+  var eventData = JSON.parse(calendarEl.getAttribute('data-events'));
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
+  
     selectable: true,
-    events: [
-      {
-        title: 'The Title',
-        start: '2018-09-01',
-        end: '2018-09-02',
-      },
-    ],
+    events: eventData,
+    
     dateClick: function(info) {
       openEventModal(info.dateStr);
     },
   });
+  
+  
+
   calendar.render();
-});
+}); 
 
 
   // Function to initialize date picker
@@ -94,5 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDatePicker();
     initializeTimePicker();
   });
+  
 
 

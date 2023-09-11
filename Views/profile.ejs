@@ -10,6 +10,49 @@
                 
                 <h1><%= user.name %></h1>
                 <h5 class="m-3"><%= user.bio %></h5>
+                <div>
+                    <div id='calendar' data-events="<%= JSON.stringify(user.calendar) %>"></div>
+                    <div>
+                    <p id="nextEventInfo"></p>
+                    </div>
+                    <script>
+                        // Parse the event data from the data attribute
+                        const eventData = JSON.parse(document.getElementById('calendar').getAttribute('data-events'));
+                
+                        // Get the current date and time
+                        const now = new Date();
+                
+                        // Filter the events that meet your criteria
+                        const upcomingEvents = eventData.filter(event => {
+                            const eventStartTime = new Date(event.start);
+                            return eventStartTime > now;
+                        });
+                
+                        // Sort the upcoming events by start date and time
+                        upcomingEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+                
+                        // Select the first event as the next event
+                        const nextEvent = upcomingEvents[0];
+                
+                        if (nextEvent) {
+                            // Access the title and start properties
+                            const nextEventTitle = nextEvent.title;
+                            const nextEventStartTime = new Date(nextEvent.start);
+                
+                            // Format the start time (you can use a library like moment.js for better formatting)
+                            const formattedStartTime = nextEventStartTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+                
+                            // Display the information
+                            const nextEventInfo = `Your next event is '${nextEventTitle}' at ${formattedStartTime}`;
+                
+                            // Assuming you have a <p> element with id "nextEventInfo"
+                            document.getElementById('nextEventInfo').textContent = nextEventInfo;
+                        } else {
+                            // If there are no upcoming events, you can display a message
+                            document.getElementById('nextEventInfo').textContent = "There are no upcoming events.";
+                        }
+                    </script>
+                </div>
                 <div class="row mt-5">
                     <div class="col-6">
                 <% if (user.currentBooks.length== 0) { %>

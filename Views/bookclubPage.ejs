@@ -38,7 +38,8 @@
                 </button>
             </div>
             <% } %>
-            <div id='calendar'>
+            <div id='calendar' data-events="<%= JSON.stringify(bookclub.calendar) %>">
+             
               <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST" enctype="multipart/form-data">
                 
                 <input type="hidden" name="_method" value="POST">
@@ -46,9 +47,10 @@
                 
               </form>
               <button id="openEventModal" class="btnMain3" data-bs-toggle="modal" data-bs-target="#eventModal">Add Event</button> <!-- this SHOULD open the modal-->
-
               
+            
             </div> 
+            
 
              <!-----add event modal-->
              <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">

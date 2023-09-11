@@ -46,9 +46,12 @@ module.exports = {
             .populate('bookClubs', 'name')
             .populate('currentBooks', 'title')
             .populate('finishedBooks', 'title cover_image')
+            .populate('calendar', 'title start end')
             .exec();
+
+            const calendarEvents = JSON.stringify(user.calendar);
       
-          res.render("profile.ejs", { user: user });
+          res.render("profile.ejs", { user: user, calendarEvents: calendarEvents});
         } catch (err) {
             return next(err);
           }
@@ -102,16 +105,19 @@ module.exports = {
             .populate('currentBook', 'title cover_image author url startDate')
             .populate('nextBook', 'title cover_image author url')
             .populate('finishedBooks', 'title cover_image url finishDate')
+            .populate('calendar', 'title start end')
             .exec();
             
             const user = await User.findById(req.user.id)
             const _id = user.id
+
+            const calendarEvents = JSON.stringify(bookclub.calendar);
             
             
             
             
     
-            res.render("bookclubPage.ejs", { bookclub: bookclub, user: user, _id: _id});
+            res.render("bookclubPage.ejs", { bookclub: bookclub, user: user, _id: _id, calendarEvents: calendarEvents });
         } catch (err) {
           return next(err);
         }
@@ -470,6 +476,7 @@ module.exports = {
               title: eventData.title,
               start: eventData.start,
               end: eventData.end,
+              eventFor: clubId
              
             });
             const savedCalendar = await calendar.save();
