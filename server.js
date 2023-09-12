@@ -5,6 +5,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
 const logger = require("morgan");
+const { cleanupOldEvents } = require('./config/cleanup');
 
 
 
@@ -14,6 +15,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const MongoStore = require("connect-mongo")(session);
 const methodOverride = require("method-override");
 const flash = require("express-flash");
+const cron = require('node-cron');
 
 const path = require('path');
 
@@ -75,7 +77,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
+cron.schedule('0 0 * * *', () => {
+  
+});
 
 //Use flash messages for errors, info, ect...
 app.use(flash());

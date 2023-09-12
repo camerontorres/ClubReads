@@ -12,9 +12,18 @@ const calendar = require("../Models/calendar");
 module.exports = {
     
 
-    getIndex: (req, res) => {
+    getIndex: async (req, res, next) => {
+      try {
+        const user = await User.findById(req.user._id)
+
+            .populate('calendar', 'title start end')
+            .exec();
+         
         
-      res.render("index.ejs", { user: req.user });
+      res.render("index.ejs", { user: user });
+    } catch (err) {
+      return next(err);
+    }
     },
     getReadingList: async (req, res, next) => {
       try{
