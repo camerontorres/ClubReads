@@ -18,9 +18,10 @@ module.exports = {
 
             .populate('calendar', 'title start end')
             .exec();
+            const calendarEvents = JSON.stringify(user.calendar);
          
         
-      res.render("index.ejs", { user: user });
+      res.render("index.ejs", { user: user, calendarEvents: calendarEvents });
     } catch (err) {
       return next(err);
     }

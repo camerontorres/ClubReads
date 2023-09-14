@@ -1,4 +1,4 @@
-const Event = require('./Models/calendar.js');
+const Event = require('../Models/calendar');
 
 async function cleanupOldEvents() {
   const oneMonthAgo = new Date();
