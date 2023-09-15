@@ -152,9 +152,13 @@ module.exports = {
           await user.save();
 
           if (club.currentBook) {
-            user.currentBooks.push(club.currentBook);
-            await user.save();
+            user.currentBooks.push(club.currentBook);        
           }
+          if (club.calendar) {
+            const calendarEventIds = club.calendar.map(event => event._id);
+            user.calendar.push(...calendarEventIds); // Spread the array of event IDs
+          }
+          await user.save();
       
           res.redirect("/bookclubPage/" + clubId);
         } catch (err) {
@@ -179,7 +183,12 @@ module.exports = {
           if (club.currentBook) {
             user.currentBooks.pull(club.currentBook);
           }
-          await user.save();
+          if (club.calendar && club.calendar.length > 0) {
+            user.calendar = user.calendar.filter((event) =>
+              !club.calendar.includes(event)
+            );
+          }
+          
 
           user.bookClubs.pull(clubId);
           await user.save();
@@ -259,7 +268,7 @@ module.exports = {
 
             club.members.forEach(async (member) => {
            
-                member.currentBook = club.savedBook;
+                member.currentBooks.push(club.savedBook) //NEEDS TESTING. DELETE COMMENT WHEN CONFIRMED TO WORK
                 await member.save();
               });
 
@@ -449,7 +458,7 @@ module.exports = {
               club.members.forEach(async (member) => {
                 
                   member.finishedBooks.push(finishedBook);
-                  member.currentBook = null
+                  member.currentBooks.pull(finishedBook) //DELTE COMMENT WHEN CONFIRMED TO WORK
                   member.currentBook = club.nextBook;
                   await member.save();
                 });
@@ -458,10 +467,10 @@ module.exports = {
 
       
       club.finishedBooks.push(finishedBook);
-      if(club.nextbook != null || undefined){
+      if(club.nextBook != null || undefined){
       club.currentBook = club.nextBook;
       club.currentBook.startDate = new Date(),
-      await currentBook.save();
+      await club.save();
       }else{
         club.currentBook = null
       }
@@ -478,7 +487,9 @@ module.exports = {
         createEvent: async (req, res, next) => {
           try {
             const clubId = req.params._id;
-            const eventData = req.body; // Assuming eventData includes title, start, and end properties
+            const userId = req.user._id;
+            const eventData = req.body; 
+
             eventData.start = new Date(eventData.start);
             eventData.end = new Date(eventData.end);
 
@@ -486,19 +497,21 @@ module.exports = {
               title: eventData.title,
               start: eventData.start,
               end: eventData.end,
-              eventFor: clubId
-             
+              eventFor: clubId,
+              createdBy: userId,
+            
             });
+
             const savedCalendar = await calendar.save();
          
             
         
-            // Update the club's calendar
+            // Update the club calendar
             const club = await Club.findById(clubId);
             club.calendar.push(savedCalendar);
             await club.save();
         
-            // Update the user's calendar for club members
+            // Update member calendars
             const clubMembers = club.members;
             await User.updateMany(
               { _id: { $in: clubMembers } },
