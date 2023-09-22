@@ -525,6 +525,43 @@ module.exports = {
             res.status(500).json({ success: false, message: 'Failed to create event' });
           }
         },
+        deleteEvent: async (req, res, next) => {
+          try {
+            const clubId = req.params._id;
+            const userId = req.user._id;
+            const eventId = req.body._id; 
+
+           
+            const event = await Calendar.findById(eventId);
+            
+            //  used to ensure the user that created the event has permission to delete
+            //if (event.createdBy.toString() !== userId.toString()) {
+              //return res.status(403).json({ success: false, message: 'You do not have permission to delete this event' });
+           // }
+            
+        
+            // Update the club calendar
+            const club = await Club.findById(clubId);
+            club.calendar.pull(eventId);
+            await club.save();
+        
+            // Update member calendars
+            const clubMembers = club.members;
+            await User.updateMany(
+              { _id: { $in: clubMembers } },
+              { $pull: { calendar: eventId } }
+            );
+
+            await event.remove();
+
+        
+            
+            res.redirect('/bookclubPage/'+ clubId)
+          } catch (err) {
+            console.error('Error deleting event:', err);
+            res.status(500).json({ success: false, message: 'Failed to delete event' });
+          }
+        },
 
 
 

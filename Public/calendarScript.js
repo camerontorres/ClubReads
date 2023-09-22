@@ -23,47 +23,118 @@ function createEvent(eventData, clubId) {
       console.error('Error creating event:', error);
     });
 }
+//********************************** */
 
-function openEventModal(selectedDate) {
-  
-  console.log(`Selected date: ${selectedDate}`);
-  
-  const createEvent = window.confirm(`No events on ${selectedDate}, would you like to create one?`);
-  if (createEvent) {
-    console.log('Creating new event');
-    const eventTitle = prompt('Enter event title:');
-    const eventStart = selectedDate;
-    
-    if (eventTitle && eventStart) {
-      const eventData = {
-        title: eventTitle,
-        start: eventStart,
-      };
+// Function to open the modal
+function openEventModal(eventDetails, eventTitles) {
+  const modal = document.getElementById('myModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+  const modalContent = document.getElementById('eventDetails');
+  const eventList = document.getElementById('eventList');
 
-      // Modify this line to pass the clubId parameter to createEvent
-      createEvent(eventData, clubId);
-    }
+  // Populate modal content with event details
+  modalContent.innerHTML = eventDetails;
+
+  // Clear any previous event titles in the eventList
+  eventList.innerHTML = '';
+
+  // If there are event titles, add them to the eventList
+  if (eventTitles.length > 0) {
+    eventTitles.forEach((title) => {
+      const listItem = document.createElement('li');
+      listItem.textContent = title;
+      eventList.appendChild(listItem);
+    });
+  } else {
+    // If there are no events, display a message
+    const listItem = document.createElement('li');
+    listItem.textContent = 'No events scheduled';
+    eventList.appendChild(listItem);
   }
+
+  // Display the modal
+  modal.style.display = 'block';
+
+  // Close modal when the close button is clicked
+  closeModalBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  // Close modal when clicking outside of it
+  window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
 }
+
+//***** Example: Trigger openEventModal on date click (modify this to fit your calendar library)
+document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+  var eventData = JSON.parse(calendarEl.getAttribute('data-events'));
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    selectable: true,
+    events: eventData,
+    dateClick: function(info) {
+      // Check if there are events for the selected date
+      const selectedDate = info.dateStr;
+
+      // Filter events for the selected date
+      const eventsForSelectedDate = eventData.filter(event => {
+        const startDate = new Date(event.start);
+        const endDate = new Date(event.end);
+        return startDate <= selectedDate && selectedDate <= endDate;
+      });
+
+      if (eventsForSelectedDate.length > 0) {
+        // Create event details content
+        const eventDetails = `<h2>${selectedDate}</h2>`;
+        
+        // Extract event titles
+        const eventTitles = eventsForSelectedDate.map(event => event.title);
+        
+        // Open the modal with event details
+        openEventModal(eventDetails, eventTitles);
+      } else {
+        // If there are no events, display a message
+        const eventDetails = `<h2>${selectedDate}</h2>`;
+        const eventTitles = ['No events scheduled'];
+        
+        // Open the modal with event details
+        openEventModal(eventDetails, eventTitles);
+      }
+    },
+  });
+  
+  calendar.render();
+});
+
+//*************** */
 
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
   var eventData = JSON.parse(calendarEl.getAttribute('data-events'));
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
-  
     selectable: true,
     events: eventData,
-    
     dateClick: function(info) {
-      openEventModal(info.dateStr);
+      // Check if there are events for the selected date
+      const selectedDate = info.dateStr;
+      const eventTitles = eventData.filter(event => event.date === selectedDate).map(event => event.title);
+      
+      // Create event details content
+      const eventDetails = `<h2>${selectedDate}</h2>`;
+      
+      // Open the modal with event details
+      openEventModal(eventDetails, eventTitles);
     },
   });
   
-  
-
   calendar.render();
-}); 
+});
+
 
 
   // Function to initialize date picker
