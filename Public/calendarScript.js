@@ -70,22 +70,45 @@ function openEventModal(eventDetails, eventTitles) {
 
 //***** Example: Trigger openEventModal on date click (modify this to fit your calendar library)
 document.addEventListener('DOMContentLoaded', function() {
+  // Find the calendar element by its ID
   var calendarEl = document.getElementById('calendar');
+  
+  // Get the event data from the data-events attribute
   var eventData = JSON.parse(calendarEl.getAttribute('data-events'));
+
+  // Create a FullCalendar instance
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     selectable: true,
     events: eventData,
+    
+    
     dateClick: function(info) {
       // Check if there are events for the selected date
-      const selectedDate = info.dateStr;
+      
+      const selectedDate = new Date(info.date);
+      selectedDate.setHours(0, 0, 0, 0);
+      console.log('Selected Date:', selectedDate);
+      console.log('eventData Date:', eventData);
 
       // Filter events for the selected date
       const eventsForSelectedDate = eventData.filter(event => {
         const startDate = new Date(event.start);
+        startDate.setHours(0, 0, 0, 0);
         const endDate = new Date(event.end);
-        return startDate <= selectedDate && selectedDate <= endDate;
+        endDate.setHours(0, 0, 0, 0);
+        console.log('Selected Date:', selectedDate);
+        console.log('Event Start Date:', startDate);
+        console.log('Event End Date:', endDate);
+        //console.log('Comparison Result:', startDate <= selectedDate && selectedDate <= endDate);
+        //return startDate <= selectedDate && selectedDate <= endDate;
+
+        const isEventMatching = startDate <= selectedDate && selectedDate <= endDate;
+        console.log('Comparison Result:', isEventMatching);
+        
+        return isEventMatching;
       });
+      console.log('im console loggin here!', eventsForSelectedDate)
 
       if (eventsForSelectedDate.length > 0) {
         // Create event details content
@@ -93,10 +116,25 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Extract event titles
         const eventTitles = eventsForSelectedDate.map(event => event.title);
+    
+        // Create a container for the events
+        const eventsContainer = document.createElement('ul');
+        eventsContainer.id = 'eventList';
+    
+        // Create list items for each event
+        eventTitles.forEach(title => {
+          const listItem = document.createElement('li');
+          listItem.textContent = title;
+          eventsContainer.appendChild(listItem);
+        });
         
+        // Append the events container to the modal
+        document.getElementById('eventDetails').innerHTML = eventDetails;
+        document.getElementById('eventDetails').appendChild(eventsContainer);
+    
         // Open the modal with event details
         openEventModal(eventDetails, eventTitles);
-      } else {
+      }  else {
         // If there are no events, display a message
         const eventDetails = `<h2>${selectedDate}</h2>`;
         const eventTitles = ['No events scheduled'];
@@ -107,10 +145,11 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   });
   
+  // Render the calendar
   calendar.render();
 });
 
-//*************** */
+/*  NOT SURE WHAT THIS DOES BUT CODE WORKS WITHOUT IT LOL
 
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
@@ -133,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   calendar.render();
-});
+}); */
 
 
 

@@ -27,15 +27,12 @@
 
                                 <div class="modal-body">
                                     <h2>Event Details</h2>
-                                        <div id="eventDetails"></div>
-                                        <ul id="eventList"> 
-                                            <% user.calendar.forEach(event => { %>
-                                                <div
-                                                  class="event-date"
-                                                  data-date="<%= event.start.toISOString() %>"
-                                                  data-title="<%= event.title %>"
-                                                ></div>
-                                              <% }) %>
+                                        <div id="eventDetails">
+                                            <ul id="eventList">
+                                                <!-- This is where your event items will be added -->
+                                              </ul>
+                                        </div>
+                                       
                                 </div>
 
 
@@ -43,7 +40,7 @@
                                     <button type="button" class=" close btn btn-secondary" id="closeModalBtn" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
                                     
                                 </div>
-                                </form>
+                            
 
                              
 
