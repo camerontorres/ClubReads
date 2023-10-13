@@ -14,10 +14,14 @@ module.exports = {
 
     getIndex: async (req, res, next) => {
       try {
+        console.log('hello')
+        console.log(req.user)
         const user = await User.findById(req.user._id)
 
             .populate('calendar', 'title start end')
             .exec();
+            
+            
             const calendarEvents = JSON.stringify(user.calendar);
          
         

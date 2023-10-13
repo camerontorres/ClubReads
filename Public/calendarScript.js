@@ -113,33 +113,44 @@ document.addEventListener('DOMContentLoaded', function() {
       if (eventsForSelectedDate.length > 0) {
         // Create event details content
         const eventDetails = `<h2>${selectedDate}</h2>`;
-        
+    
         // Extract event titles
         const eventTitles = eventsForSelectedDate.map(event => event.title);
+        console.log(eventTitles);
     
         // Create a container for the events
         const eventsContainer = document.createElement('ul');
         eventsContainer.id = 'eventList';
     
+        // Clear previous entries and append the events container
+        const eventDetailDiv = document.getElementById('eventDetails');
+        eventDetailDiv.innerHTML = '';
+        eventDetailDiv.appendChild(eventsContainer);
+    
         // Create list items for each event
         eventTitles.forEach(title => {
-          const listItem = document.createElement('li');
-          listItem.textContent = title;
-          eventsContainer.appendChild(listItem);
+            console.log(title);
+            const listItem = document.createElement('li');
+            listItem.textContent = title;
+            eventsContainer.appendChild(listItem);
         });
-        
-        // Append the events container to the modal
-        document.getElementById('eventDetails').innerHTML = eventDetails;
-        document.getElementById('eventDetails').appendChild(eventsContainer);
     
         // Open the modal with event details
         openEventModal(eventDetails, eventTitles);
-      }  else {
+    }  else {
         // If there are no events, display a message
         const eventDetails = `<h2>${selectedDate}</h2>`;
         const eventTitles = ['No events scheduled'];
         
-        // Open the modal with event details
+        // Create a container for the message
+        const messageContainer = document.createElement('div');
+        messageContainer.innerHTML = eventDetails;
+    
+        // Append the message container to the modal
+        document.getElementById('eventDetails').innerHTML = eventDetails;
+        eventDetails.appendChild(messageContainer);
+    
+        // Open the modal with the message
         openEventModal(eventDetails, eventTitles);
       }
     },
