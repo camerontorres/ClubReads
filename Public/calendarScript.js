@@ -26,30 +26,49 @@ function createEvent(eventData, clubId) {
 //********************************** */
 
 // Function to open the modal
-function openEventModal(eventDetails, eventTitles) {
+function openEventModal(eventDetails, eventTitles, startDate) {
   const modal = document.getElementById('myModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const modalContent = document.getElementById('eventDetails');
   const eventList = document.getElementById('eventList');
-
+  
+  console.log('eventstart:' ,startDate)
+  
   // Populate modal content with event details
   modalContent.innerHTML = eventDetails;
+  console.log('eventtitle', eventTitles)
 
   // Clear any previous event titles in the eventList
-  eventList.innerHTML = '';
+  if (eventList) {
+    eventList.innerHTML = '';
+  } else {
+    console.error('eventList element not found');
+  }
 
   // If there are event titles, add them to the eventList
   if (eventTitles.length > 0) {
     eventTitles.forEach((title) => {
+      console.log('title', title)
       const listItem = document.createElement('li');
-      listItem.textContent = title;
-      eventList.appendChild(listItem);
+      const myList = document.createElement('ul');
+      modalContent.appendChild(myList)
+      
+      if (startDate instanceof Date) {
+        const startOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+        const formattedStart = startDate.toLocaleTimeString(undefined, startOptions);
+        listItem.innerHTML = `<h2>${title} at ${formattedStart}</h2>`;
+      } else {
+        console.error('Invalid eventStart:', startDate);
+        listItem.innerHTML = `<h2>${title}!</h2>`;
+      }
+
+      myList.appendChild(listItem);
     });
   } else {
     // If there are no events, display a message
     const listItem = document.createElement('li');
     listItem.textContent = 'No events scheduled';
-    eventList.appendChild(listItem);
+    modalContent.appendChild(listItem);
   }
 
   // Display the modal
@@ -87,9 +106,13 @@ document.addEventListener('DOMContentLoaded', function() {
       // Check if there are events for the selected date
       
       const selectedDate = new Date(info.date);
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const formattedDate = selectedDate.toLocaleDateString(undefined, options);
+
       selectedDate.setHours(0, 0, 0, 0);
       console.log('Selected Date:', selectedDate);
       console.log('eventData Date:', eventData);
+      const eventDetailDiv = document.getElementById('eventDetails');
 
       // Filter events for the selected date
       const eventsForSelectedDate = eventData.filter(event => {
@@ -112,18 +135,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (eventsForSelectedDate.length > 0) {
         // Create event details content
-        const eventDetails = `<h2>${selectedDate}</h2>`;
+        const eventDetails = `<h2>${formattedDate}</h2>`;
     
         // Extract event titles
         const eventTitles = eventsForSelectedDate.map(event => event.title);
         console.log(eventTitles);
+        const eventStart = eventsForSelectedDate.map(event => event.start);
+        const startDate = new Date(eventStart)
+        
     
         // Create a container for the events
         const eventsContainer = document.createElement('ul');
         eventsContainer.id = 'eventList';
     
         // Clear previous entries and append the events container
-        const eventDetailDiv = document.getElementById('eventDetails');
+        
         eventDetailDiv.innerHTML = '';
         eventDetailDiv.appendChild(eventsContainer);
     
@@ -131,15 +157,15 @@ document.addEventListener('DOMContentLoaded', function() {
         eventTitles.forEach(title => {
             console.log(title);
             const listItem = document.createElement('li');
-            listItem.textContent = title;
+            listItem.textContent = `${title} at ${startDate}`;
             eventsContainer.appendChild(listItem);
         });
     
         // Open the modal with event details
-        openEventModal(eventDetails, eventTitles);
+        openEventModal(eventDetails, eventTitles, startDate);
     }  else {
         // If there are no events, display a message
-        const eventDetails = `<h2>${selectedDate}</h2>`;
+        const eventDetails = `<h2>${formattedDate}</h2>`;
         const eventTitles = ['No events scheduled'];
         
         // Create a container for the message
@@ -147,11 +173,12 @@ document.addEventListener('DOMContentLoaded', function() {
         messageContainer.innerHTML = eventDetails;
     
         // Append the message container to the modal
-        document.getElementById('eventDetails').innerHTML = eventDetails;
-        eventDetails.appendChild(messageContainer);
+        const eventDetailsContainer = document.getElementById('eventDetails');
+        eventDetailsContainer.innerHTML = ''; // Clear previous entries
+        
     
         // Open the modal with the message
-        openEventModal(eventDetails, eventTitles);
+        openEventModal(eventDetails, eventTitles, formattedDate);
       }
     },
   });
