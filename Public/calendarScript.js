@@ -32,7 +32,7 @@ function openEventModal(eventDetails, eventTitles, startDate) {
   const modalContent = document.getElementById('eventDetails');
   const eventList = document.getElementById('eventList');
   
-  console.log('eventstart:' ,startDate)
+ 
   
   // Populate modal content with event details
   modalContent.innerHTML = eventDetails;
@@ -48,7 +48,7 @@ function openEventModal(eventDetails, eventTitles, startDate) {
   // If there are event titles, add them to the eventList
   if (eventTitles.length > 0) {
     eventTitles.forEach((title) => {
-      console.log('title', title)
+      //console.log('title', title) TESTLOG
       const listItem = document.createElement('li');
       const myList = document.createElement('ul');
       modalContent.appendChild(myList)
@@ -110,8 +110,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const formattedDate = selectedDate.toLocaleDateString(undefined, options);
 
       selectedDate.setHours(0, 0, 0, 0);
-      console.log('Selected Date:', selectedDate);
-      console.log('eventData Date:', eventData);
+      //console.log('Selected Date:', selectedDate);
+      //console.log('eventData Date:', eventData);
       const eventDetailDiv = document.getElementById('eventDetails');
 
       // Filter events for the selected date
@@ -120,26 +120,27 @@ document.addEventListener('DOMContentLoaded', function() {
         startDate.setHours(0, 0, 0, 0);
         const endDate = new Date(event.end);
         endDate.setHours(0, 0, 0, 0);
-        console.log('Selected Date:', selectedDate);
-        console.log('Event Start Date:', startDate);
-        console.log('Event End Date:', endDate);
+        //TESTS
+        //console.log('Selected Date:', selectedDate);
+        //console.log('Event Start Date:', startDate);
+        //console.log('Event End Date:', endDate);
         //console.log('Comparison Result:', startDate <= selectedDate && selectedDate <= endDate);
         //return startDate <= selectedDate && selectedDate <= endDate;
 
         const isEventMatching = startDate <= selectedDate && selectedDate <= endDate;
-        console.log('Comparison Result:', isEventMatching);
+       // console.log('Comparison Result:', isEventMatching); TEST LOG
         
         return isEventMatching;
       });
-      console.log('im console loggin here!', eventsForSelectedDate)
+      //console.log('im console loggin here!', eventsForSelectedDate) TESTLOG
 
       if (eventsForSelectedDate.length > 0) {
         // Create event details content
-        const eventDetails = `<h2>${formattedDate}</h2>`;
+        const eventDetails = `<h4>${formattedDate}</h4>`;
     
         // Extract event titles
         const eventTitles = eventsForSelectedDate.map(event => event.title);
-        console.log(eventTitles);
+        //console.log(eventTitles); TESTLOG
         const eventStart = eventsForSelectedDate.map(event => event.start);
         const startDate = new Date(eventStart)
         
@@ -155,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
         // Create list items for each event
         eventTitles.forEach(title => {
-            console.log(title);
+            //console.log(title);
             const listItem = document.createElement('li');
             listItem.textContent = `${title} at ${startDate}`;
             eventsContainer.appendChild(listItem);
@@ -165,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
         openEventModal(eventDetails, eventTitles, startDate);
     }  else {
         // If there are no events, display a message
-        const eventDetails = `<h2>${formattedDate}</h2>`;
+        const eventDetails = `<h4>${formattedDate}</h4>`;
         const eventTitles = ['No events scheduled'];
         
         // Create a container for the message

@@ -31,16 +31,19 @@ module.exports = {
     }
     },
     getReadingList: async (req, res, next) => {
-      try{
-        
-        const user = await User.findById(req.params._id)
-        .populate('bookClubs', 'name')
-        .populate('currentBooks', 'title cover_image')
-        .populate('finishedBooks', 'title cover_image')
-        .exec();
-        
-      res.render("readingList.ejs", { user: user })
-      }catch (err) {
+      try {
+        const user = await User.findById(req.user._id)
+          .populate('bookClubs', 'name')
+          .populate('currentBooks', 'title cover_image')
+          .populate('finishedBooks', 'title cover_image')
+          .exec();
+    
+        if (!user) {
+          return res.status(404).send('User not found');
+        }
+    
+        res.render("readingList.ejs", { user: user });
+      } catch (err) {
         next(err);
       }
     },

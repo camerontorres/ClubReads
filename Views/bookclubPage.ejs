@@ -39,17 +39,90 @@
             </div>
             <% } %>
             <div id='calendar' data-events="<%= JSON.stringify(bookclub.calendar) %>">
+              
+              <p class="text-center" id="nextEventInfo"></p>
+              
              
-              <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST" enctype="multipart/form-data">
-                
-                <input type="hidden" name="_method" value="POST">
-                <button id="addEventButton" type="button" class="btn btn-primary">Add Event</button>
-                
-              </form>
+              
               <button id="openEventModal" class="btnMain3" data-bs-toggle="modal" data-bs-target="#eventModal">Add Event</button> <!-- this SHOULD open the modal-->
               
             
             </div> 
+              <script>
+              // Parse the event data from the data attribute
+              const eventData = JSON.parse(document.getElementById('calendar').getAttribute('data-events'));
+      
+              // Get the current date and time
+              const now = new Date();
+      
+              // Filter the events that meet your criteria
+              const upcomingEvents = eventData.filter(event => {
+                  const eventStartTime = new Date(event.start);
+                  return eventStartTime > now;
+              });
+      
+              // Sort the upcoming events by start date and time
+              upcomingEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+      
+              // Select the first event as the next event
+              const nextEvent = upcomingEvents[0];
+      
+              if (nextEvent) {
+                  // Access the title and start properties
+                  const nextEventTitle = nextEvent.title;
+                  const nextEventStartTime = new Date(nextEvent.start);
+      
+                  // Format the start time (you can use a library like moment.js for better formatting)
+                  const formattedStartTime = nextEventStartTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      
+                  // Display the information
+                  const nextEventInfo = `The next event is '${nextEventTitle}' at ${formattedStartTime}`;
+      
+                  // Assuming you have a <p> element with id "nextEventInfo"
+                  document.getElementById('nextEventInfo').textContent = nextEventInfo;
+              } else {
+                  // If there are no upcoming events, you can display a message
+                  document.getElementById('nextEventInfo').textContent = "There are no upcoming events.";
+              }
+          </script>
+            
+
+            <!---DATE PICK MODAL-->
+            <div class="modal" id="myModal"  aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="clubModalLabel">Event Details</h5>
+                      <button type="button" class="fa-regular fa-xmark"  aria-label="Close"></button>
+                  </div>
+
+
+                  <div class="modal-body">
+                      <h3>Event Details</h3>
+                          <div id="eventDetails">
+                              
+                              <div id="eventList">
+
+                              </div>
+                              
+                          </div>
+                         
+                  </div>
+
+
+                  <div class="modal-footer">
+                      <button type="button" class=" close btn btn-secondary" id="closeModalBtn" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                      
+                  </div>
+              
+
+
+                  </div>
+                  </div>
+              
+             
+              </div> 
             
 
              <!-----add event modal-->
