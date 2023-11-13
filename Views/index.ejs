@@ -22,7 +22,7 @@
         
          
           <% } else{  %>
-            <h3 class="text-center">Happy reading!</h3>
+            <h3 class="text-center">Happy reading, <%= user.name %>!</h3>
             
 
             <div class="row d-flex flex-row justify-content-center">
@@ -45,19 +45,97 @@
                 
                    
                 
-                    <div>
-                        <div class="col-md-3  my-5">
-                            <a href="/logout" class="btnMain2 btn-danger text-nowrap"> logout</a>
-                        </div>
-                        
-                    </div>
+                    
                 </div>
             </div>
                 
         </div>
         <div>
-            <div id='calendar' data-events="<%= JSON.stringify(user.calendar) %>" class="bg bg-light text-dark"></div>
+            <div id='calendar' data-events="<%= JSON.stringify(user.calendar) %>" class="bg bg-light text-dark mx-auto"></div>
         </div>
+        <div class="modal text-dark " id="myModal"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Event Details</h5>
+                    <button type="button" class="fa-regular fa-xmark"  aria-label="Close"></button>
+                </div>
+
+
+                <div class="modal-body">
+                    
+                        <div id="eventDetails">
+                            
+                            <div id="eventList">
+
+                            </div>
+                            
+                        </div>
+                       
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class=" close btn btn-secondary" id="closeModalBtn" data-bs-dismiss="modal">Close <span aria-hidden="true">&times;</span> </button>
+                    
+                </div>
+            
+
+    
+                </div>
+                </div>
+            
+           
+            </div> 
+
+          <!---**********MODAL**************-->
+
+          
+            <div class="row">
+              <div class="col pt-5 text-center">
+                <p class="mx-auto" id="nextEventInfo">Your content here</p>
+              </div>
+            </div>
+          
+    </div>
+    <script>
+        // Parse the event data from the data attribute
+        const eventData = JSON.parse(document.getElementById('calendar').getAttribute('data-events'));
+
+        // Get the current date and time
+        const now = new Date();
+
+        // Filter the events that meet your criteria
+        const upcomingEvents = eventData.filter(event => {
+            const eventStartTime = new Date(event.start);
+            return eventStartTime > now;
+        });
+
+        // Sort the upcoming events by start date and time
+        upcomingEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+
+        // Select the first event as the next event
+        const nextEvent = upcomingEvents[0];
+
+        if (nextEvent) {
+            // Access the title and start properties
+            const nextEventTitle = nextEvent.title;
+            const nextEventStartTime = new Date(nextEvent.start);
+
+            // Format the start time (you can use a library like moment.js for better formatting)
+            const formattedStartTime = nextEventStartTime.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+
+            // Display the information
+            const nextEventInfo = `Your next event is '${nextEventTitle}' at ${formattedStartTime}`;
+
+            // Assuming you have a <p> element with id "nextEventInfo"
+            document.getElementById('nextEventInfo').textContent = nextEventInfo;
+        } else {
+            // If there are no upcoming events, you can display a message
+            document.getElementById('nextEventInfo').textContent = "There are no upcoming events.";
+        }
+    </script>
             
             
             <% } %>

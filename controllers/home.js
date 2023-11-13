@@ -14,21 +14,22 @@ module.exports = {
 
     getIndex: async (req, res, next) => {
       try {
-        console.log('hello')
-        console.log(req.user)
-        const user = await User.findById(req.user._id)
-
+        if (req.user) {
+          // if logged in
+          const user = await User.findById(req.user._id)
             .populate('calendar', 'title start end')
             .exec();
-            
-            
-            const calendarEvents = JSON.stringify(user.calendar);
-         
-        
-      res.render("index.ejs", { user: user, calendarEvents: calendarEvents });
-    } catch (err) {
-      return next(err);
-    }
+    
+          const calendarEvents = JSON.stringify(user.calendar);
+    
+          res.render("index.ejs", { user: user, calendarEvents: calendarEvents });
+        } else {
+          // if not logged in
+          res.render("index.ejs", { user: null, calendarEvents: null });
+        }
+      } catch (err) {
+        return next(err);
+      }
     },
     getReadingList: async (req, res, next) => {
       try {
@@ -92,6 +93,8 @@ module.exports = {
 
       getViewProfile: async (req, res, next) => {
         try {
+        
+        
 
             const viewUser = await User.findById(req.params._id)
             .populate('bio')
@@ -100,9 +103,12 @@ module.exports = {
             .populate('finishedBooks', 'title cover_image')
             .exec();
             
+            if(viewUser._id.equals(req.user._id)){
+              res.redirect('/profile')
+            } else{
             
     
-            res.render("profileView.ejs", { member: viewUser, user: req.user });
+            res.render("profileView.ejs", { member: viewUser, user: req.user })};
         } catch (err) {
           return next(err);
         }
