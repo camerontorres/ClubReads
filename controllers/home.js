@@ -217,6 +217,11 @@ module.exports = {
       postNewClub: async (req, res, next) => {
         try {
           const userId = req.user._id;
+          //const checkBox = document.getElementById("privateCheckbox")
+          //if(checkBox.checked === 'true'){
+          //    const isPrivate = true
+          //}
+          const isPrivate = req.body.privacyBox === 'true'
     
           const bookClub = new Club({
             name: req.body.clubName,
@@ -224,6 +229,7 @@ module.exports = {
             clubPic: req.body.clubPic,
             members: [userId],
             mod: userId,
+            isPrivate: isPrivate
             
           });
     
