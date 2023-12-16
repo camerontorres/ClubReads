@@ -1,0 +1,55 @@
+<%- include ('partials/header.ejs') %>
+<section id="banner" class="d-flex justify-content-center align-content-center" style="background-image: url('/public/images/login.jpg'); height: 13em;position: relative;">
+    <div class="overlay" style="height: 13em;"></div>
+        
+        <div class="content-container mx-auto my-auto" style="position: relative; z-index: 3;">
+            <h1 class="text-center mx-auto my-auto" style="color: #FBFBFB;;">pending members</h1>
+        </div>
+                        
+    </section>
+
+
+
+    <div>
+        <h2 class="text-center my-5">Pending members:</h2>
+        <div class="contentBox justify-content-center align-items-start" style="height: auto;">
+        <ul class="mx-auto" style="width: 80vw; object-position: top;">
+            <% for( let i = 0; i < bookclub.pendingMembers.length; i++ ) { %>
+                <li class="<%= i % 2 === 0 ? 'even-background' : '' %> clubListLi " style="display: flex; align-items: center; ">
+                <p class="col-6" style=" display: flex; align-items: center;">
+                    
+                    <img class="clubPicMini" src="<%= bookclub.pendingMembers[i].profilePic %>" style="object-fit: fill;">
+                    <a class="pl-2 my-auto clubListName" href="/profileView/<%= bookclub.pendingMembers[i]._id%>" style=" font-size: 1.5em;"><%= bookclub.pendingMembers[i].name %></a>
+
+                    <form action="/bookclubPage/<%= bookclub._id %>/acceptMember" method="POST">
+                        <input type="hidden" name="pendingUserId" value="<%= bookclub.pendingMembers[i]._id %>">
+                        <button type="submit" class="btnMain3">accept</button>
+                    </form>
+                
+                    <form action="/bookclubPage/<%= bookclub._id %>/denyMember" method="POST">
+                    <a class=" btn btnMain2">deny</a>
+                    </form>
+                </p>
+                
+                 
+                    
+                </li>
+            
+            <% } %>
+        </ul>
+    </div>
+
+
+
+       
+
+
+</div>
+<a class="ml-5" href="/bookclubPage/<%= bookclub._id %>"><i class="fas fa-angle-double-left"></i>Go back</a>
+
+
+
+
+
+
+<%- include ('partials/footer.ejs') %>

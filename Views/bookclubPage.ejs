@@ -24,6 +24,13 @@
                   <% } %>
                 <% } %>
               </li>
+              <% if (bookclub.pendingMembers && bookclub.pendingMembers.length > 0){%>
+                <div class="m-3">
+                  <a  class="m-5 pendingButton btnMain2 " href='/bookclubPage/<%= bookclub._id%>/pendingMembers'>
+                      Pending members!
+                  </a>
+              </div>
+              <%} %>
             <li><%= bookclub.mod ? bookclub.mod.name + ' is a mod' : 'No mod assigned' %></li>
             <li> <% if (bookclub.created_at) { %>
                 <% const createdAt = new Date(bookclub.created_at); %>
