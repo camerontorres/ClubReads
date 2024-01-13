@@ -27,7 +27,8 @@
                     </form>
                 
                     <form action="/bookclubPage/<%= bookclub._id %>/denyMember" method="POST">
-                    <a class=" btn btnMain2">deny</a>
+                        <input type="hidden" name="pendingUserId" value="<%= bookclub.pendingMembers[i]._id %>">
+                    <button class=" btn btnMain2">deny</button>
                     </form>
                 </p>
                 

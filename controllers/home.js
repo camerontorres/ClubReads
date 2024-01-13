@@ -129,6 +129,7 @@ module.exports = {
             .populate('nextBook', 'title cover_image author url')
             .populate('finishedBooks', 'title cover_image url finishDate')
             .populate('calendar', 'title start end')
+            .populate('pendingMembers', '_id')
             .exec();
             
             const user = await User.findById(req.user.id)
@@ -267,12 +268,16 @@ module.exports = {
          
       
           // Add the user to the club's members array
+          if(club.members.includes(pendingUserId)){
+            console.error(err)
+          }else{
           club.members.push(pendingUserId);
           await club.save();
+          }
       
           // Add the club to the user's bookClubs array
           pendingUser.bookClubs.push(clubId);
-          await user.save();
+          await pendingUser.save();
 
           if (club.currentBook) {
             pendingUser.currentBooks.push(club.currentBook);        
@@ -281,6 +286,8 @@ module.exports = {
             const calendarEventIds = club.calendar.map(event => event._id);
             pendingUser.calendar.push(...calendarEventIds); // Spread the array of event IDs
           }
+          club.pendingMembers.pull(pendingUserId)
+          await club.save()
           await pendingUser.save();
       
           res.redirect("/bookclubPage/" + clubId);
@@ -291,47 +298,26 @@ module.exports = {
       deny: async (req, res, next) => {
         try {
           
-          const userId = req.user._id;
+          const pendingUserId = req.body.pendingUserId;
           const clubId = req.params._id;
       
           // Find the user and club by their IDs
-          const user = await User.findById(userId);
+          const pendingUser = await User.findById(pendingUserId);
           const club = await Club.findById(clubId);
-          if (club.isPrivate) {
-            if (!club.pendingMembers.includes(userId)) {
-              club.pendingMembers.push(userId);
-              await club.save();
-              res.redirect("/bookclubPage/" + clubId);
-            } else {
-              
-              res.status(400).send("User is already in the pending list.");
-            }
-          }else{
-          
+         
       
           // Add the user to the club's members array
-          club.members.push(userId);
+          club.pendingMembers.pull(pendingUserId);
           await club.save();
       
-          // Add the club to the user's bookClubs array
-          user.bookClubs.push(clubId);
-          await user.save();
-
-          if (club.currentBook) {
-            user.currentBooks.push(club.currentBook);        
-          }
-          if (club.calendar) {
-            const calendarEventIds = club.calendar.map(event => event._id);
-            user.calendar.push(...calendarEventIds); // Spread the array of event IDs
-          }
-          await user.save();
+        
+          
       
           res.redirect("/bookclubPage/" + clubId);
-        }} catch (err) {
+        } catch (err) {
           next(err);
         }
       },
-
       
       postNewClub: async (req, res, next) => {
         try {

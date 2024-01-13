@@ -25,10 +25,11 @@
                 <% } %>
               </li>
               <% if (bookclub.pendingMembers && bookclub.pendingMembers.length > 0){%>
-                <div class="m-3">
+                <div class="m-3"><% if (user.bookClubs.includes(bookclub._id) && !bookclub.pendingMembers.includes(user._id)) { %>
                   <a  class="m-5 pendingButton btnMain2 " href='/bookclubPage/<%= bookclub._id%>/pendingMembers'>
                       Pending members!
                   </a>
+                  <% } %>
               </div>
               <%} %>
             <li><%= bookclub.mod ? bookclub.mod.name + ' is a mod' : 'No mod assigned' %></li>
@@ -50,8 +51,9 @@
               <p class="text-center" id="nextEventInfo"></p>
               
              
-              
+              <% if (!user.bookClubs.includes(bookclub._id) || bookclub.pendingMembers.includes(user._id)) { %>
               <button id="openEventModal" class="btnMain3" data-bs-toggle="modal" data-bs-target="#eventModal">Add Event</button> <!-- this SHOULD open the modal-->
+              <% } %>
               
             
             </div> 
@@ -144,7 +146,9 @@
 
               <div class="modal-body">
                 <span class="close">&times;</span>
+                <% if (user.bookClubs.includes(bookclub._id) && !bookclub.pendingMembers.includes(user._id)) { %>
                 <h2>Add Event</h2>
+                <% } %>
                 <form action="/bookclubPage/<%= bookclub._id %>/createEvent" method="POST">
                     <input type="hidden" name="_method" value="PUT">
 
@@ -297,7 +301,7 @@
                     <div class="my-auto mx-auto text-center">
                         <p class="text-center" >We're not reading anything! </p>
                         <!--add book button starts-->
-                        <% if (user.bookClubs.includes(bookclub._id)) { %>
+                        <% if (!user.bookClubs.includes(bookclub._id) && bookclub.pendingMembers.includes(user._id)) { %>
                         <div class="text-center">
                             <button type="button" id="addBook" class="addBookBtn mx-auto btnMain3 btn-primary " data-bs-toggle="modal" data-bs-target="#addBookModal">
                                 Add book!
@@ -659,9 +663,9 @@
 
         <div class="col-md-6 d-flex justify-content-center align-items-center">
         <!--  BUTTONS-->
-        <% if (!user.bookClubs.includes(bookclub._id)) { %>
+        <% if (!user.bookClubs.includes(bookclub._id) && !bookclub.pendingMembers.includes(user._id)) { %>
         <form action="/bookclubPage/<%= bookclub._id %>/join" method="POST">
-            <button type="submit" class="btnMain3 btn-primary">Join Club</button>
+            <button type="submit" class="btnMain3 btn-primary">Join  Club</button>
           </form>
           <% } %>
         
